@@ -6,46 +6,84 @@ namespace InventorySystem
 {
 	public class LevelManager : MonoBehaviour
 	{
-		private const int NUMBER_GROUND_LINE = 24;
-		private const int NUMBER_ROCK = 3;
+		private const int NUMBER_GROUND_LINES = 24;
+		private const int NUMBER_ROCKS = 3;
+		private const int NUMBER_SPAWNING_ITEMS = 3;
 
+		public Transform TileParent;
+		public Transform ItemParent;
 		public GameObject WallTile;
 		public GameObject GroundTile;
 		public GameObject RockTile;
+		public GameObject ItemPrefab;
+		public ItemDatabase ItemDB;
+
+		private float _groundCoordinate;
+
+		private Vector3 RandomCoordinates
+		{
+			get
+			{
+				float x = Random.value * _groundCoordinate * 2 - _groundCoordinate;
+				float y = Random.value * _groundCoordinate * 2 - _groundCoordinate;
+				return new Vector3(x, y, 0);
+			}
+		}
 
 		// Use this for initialization
 		void Start()
 		{
 			float tileSize = GroundTile.GetComponent<Renderer>().bounds.size.x;
-			float groundSize = tileSize * NUMBER_GROUND_LINE;
+			float groundSize = tileSize * NUMBER_GROUND_LINES;
 			float wallCoordinate = (groundSize + tileSize) / 2;
-			float groundCoordinate = wallCoordinate - tileSize;
+			_groundCoordinate = wallCoordinate - tileSize;
 
 			// wall
-			for (int i = 0; i < NUMBER_GROUND_LINE; ++i)
+			for (int i = 0; i < NUMBER_GROUND_LINES; ++i)
 			{
-				float coordinate = i * tileSize - groundCoordinate;
-				Instantiate(WallTile, new Vector3(-wallCoordinate, coordinate, 0), Quaternion.identity, transform);
-				Instantiate(WallTile, new Vector3(wallCoordinate, coordinate, 0), Quaternion.identity, transform);
-				Instantiate(WallTile, new Vector3(coordinate, -wallCoordinate, 0), Quaternion.identity, transform);
-				Instantiate(WallTile, new Vector3(coordinate, wallCoordinate, 0), Quaternion.identity, transform);
+				float coordinate = i * tileSize - _groundCoordinate;
+				Instantiate(WallTile, new Vector3(-wallCoordinate, coordinate, 0), Quaternion.identity, TileParent);
+				Instantiate(WallTile, new Vector3(wallCoordinate, coordinate, 0), Quaternion.identity, TileParent);
+				Instantiate(WallTile, new Vector3(coordinate, -wallCoordinate, 0), Quaternion.identity, TileParent);
+				Instantiate(WallTile, new Vector3(coordinate, wallCoordinate, 0), Quaternion.identity, TileParent);
 			}
 
 			// ground
-			for (int i = 0; i < NUMBER_GROUND_LINE; ++i)
+			for (int i = 0; i < NUMBER_GROUND_LINES; ++i)
 			{
-				for (int j = 0; j < NUMBER_GROUND_LINE; ++j)
+				for (int j = 0; j < NUMBER_GROUND_LINES; ++j)
 				{
-					Instantiate(GroundTile, new Vector3(i * tileSize - groundCoordinate, j * tileSize - groundCoordinate, 0), Quaternion.identity, transform);
+					Instantiate(GroundTile, new Vector3(i * tileSize - _groundCoordinate, j * tileSize - _groundCoordinate, 0), Quaternion.identity, TileParent);
 				}
 			}
 
 			// rock
-			for (int i = 0; i < NUMBER_ROCK; ++i)
+			for (int i = 0; i < NUMBER_ROCKS; ++i)
 			{
-				float x = Random.value * groundCoordinate * 2 - groundCoordinate;
-				float y = Random.value * groundCoordinate * 2 - groundCoordinate;
-				Instantiate(RockTile, new Vector3(x, y, 0), Quaternion.identity, transform);
+				Instantiate(RockTile, RandomCoordinates, Quaternion.identity, TileParent);
+			}
+
+			// item
+			SpawnNewItems();
+		}
+
+		private void OnEnable()
+		{
+			EventManager.StartListening(EventName.SPAWN_NEW_ITEMS, SpawnNewItems);
+		}
+
+		private void OnDisable()
+		{
+			EventManager.StopListening(EventName.SPAWN_NEW_ITEMS, SpawnNewItems);
+		}
+
+		public void SpawnNewItems()
+		{
+			for (int i = 0; i < NUMBER_SPAWNING_ITEMS; ++i)
+			{
+				GameObject itemObject = Instantiate(ItemPrefab, RandomCoordinates, Quaternion.identity, ItemParent);
+				Item item = ItemDB.AttachItemComponent(itemObject, 0);
+				itemObject.GetComponent<SpriteRenderer>().sprite = item.Icon;
 			}
 		}
 	}

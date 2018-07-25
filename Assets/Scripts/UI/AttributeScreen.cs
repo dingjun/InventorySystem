@@ -6,9 +6,9 @@ namespace InventorySystem
 {
 	public class AttributeScreen : MonoBehaviour
 	{
+		private AttributeController _playerStats;
 		private List<AttributeEntry> _entries;
-
-		public AttributeController PlayerStats;
+		
 		public GameObject AttributeEntry;
 
 		// Use this for initialization
@@ -16,8 +16,11 @@ namespace InventorySystem
 		{
 			_entries = new List<AttributeEntry>();
 
+			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
+			_playerStats = player.GetComponent<AttributeController>();
+
 			float height = AttributeEntry.GetComponent<RectTransform>().rect.height;
-			for (int i = 0; i < PlayerStats.AttributeTable.Count; ++i)
+			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{
 				GameObject entry = Instantiate(AttributeEntry, transform);
 				entry.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, i * height, height);
@@ -30,6 +33,10 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.UPDATE_ATTRIBUTE, UpdateAttribute);
+			if (_entries != null)
+			{
+				UpdateAttribute();
+			}
 		}
 
 		private void OnDisable()
@@ -39,9 +46,9 @@ namespace InventorySystem
 
 		private void UpdateAttribute()
 		{
-			for (int i = 0; i < PlayerStats.AttributeTable.Count; ++i)
+			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{
-				_entries[i].SetText(PlayerStats.AttributeTable[(Attribute.AttributeType)i]);
+				_entries[i].SetText(_playerStats.AttributeTable[(Attribute.AttributeType)i]);
 			}
 		}
 	}
