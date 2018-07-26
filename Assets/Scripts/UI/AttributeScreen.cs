@@ -9,34 +9,28 @@ namespace InventorySystem
 		private AttributeController _playerStats;
 		private List<AttributeEntry> _entries;
 		
-		public GameObject AttributeEntry;
+		public GameObject AttributeEntryPrefab;
 
-		// Use this for initialization
-		void Start()
+		private void Awake()
 		{
 			_entries = new List<AttributeEntry>();
 
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerStats = player.GetComponent<AttributeController>();
 
-			float height = AttributeEntry.GetComponent<RectTransform>().rect.height;
+			float height = AttributeEntryPrefab.GetComponent<RectTransform>().rect.height;
 			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{
-				GameObject entry = Instantiate(AttributeEntry, transform);
+				GameObject entry = Instantiate(AttributeEntryPrefab, transform);
 				entry.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, i * height, height);
 				_entries.Add(entry.GetComponent<AttributeEntry>());
 			}
-
-			UpdateAttribute();
 		}
 
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.UPDATE_ATTRIBUTE, UpdateAttribute);
-			if (_entries != null)
-			{
-				UpdateAttribute();
-			}
+			UpdateAttribute();
 		}
 
 		private void OnDisable()

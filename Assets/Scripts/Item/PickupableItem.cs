@@ -9,15 +9,14 @@ namespace InventorySystem
 		public void OnPickup(InventoryController playerInventory)
 		{
 			Debug.Log("Pickup " + Name);
-			playerInventory.AddItem(this);
+			playerInventory.AddItem((Item)MemberwiseClone());
 			Destroy(gameObject);
 		}
 
-		public void OnDrop(InventoryController playerInventory)
+		public void OnDrop(InventoryController playerInventory, int rowIndex, int slotIndex)
 		{
 			Debug.Log("Drop " + Name);
-			playerInventory.RemoveItem(this);
-			Destroy(gameObject);
+			playerInventory.RemoveItem(rowIndex, slotIndex);
 		}
 
 		public static PickupableItem Attach(GameObject itemObject, string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)

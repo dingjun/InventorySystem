@@ -11,6 +11,8 @@ namespace InventorySystem
 		public const string TOGGLE_ATTRIBUTE_SCREEN		= "TOGGLE_ATTRIBUTE_SCREEN";
 		public const string SPAWN_NEW_ITEMS				= "SPAWN_NEW_ITEMS";
 
+		public const string UPDATE_INVENTORY			= "UPDATE_INVENTORY";
+		public const string UPDATE_EQUIPMENT			= "UPDATE_EQUIPMENT";
 		public const string UPDATE_ATTRIBUTE			= "UPDATE_ATTRIBUTE";
 	}
 }

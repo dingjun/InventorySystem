@@ -8,6 +8,6 @@ namespace InventorySystem
 	{
 		void OnPickup(InventoryController playerInventory);
 
-		void OnDrop(InventoryController playerInventor);
+		void OnDrop(InventoryController playerInventor, int rowIndex, int slotIndex);
 	}
 }

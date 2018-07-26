@@ -10,19 +10,28 @@ namespace InventorySystem
 		private Dictionary<string, UnityEvent> _eventDictionary;
 
 		private static EventManager _eventManager;
-
-		public static EventManager Instance
+		private static bool _isApplicationQuitting = false;
+		
+		private static EventManager Instance
 		{
 			get
 			{
 				if (_eventManager == null)
 				{
 					_eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
-					Debug.Assert(_eventManager != null);
-					_eventManager.Init();
+					Debug.Assert(_eventManager != null || _isApplicationQuitting == true);
+					if (_isApplicationQuitting == false)
+					{
+						_eventManager.Init();
+					}
 				}
 				return _eventManager;
 			}
+		}
+
+		private void OnApplicationQuit()
+		{
+			_isApplicationQuitting = true;
 		}
 
 		private void Init()
@@ -51,7 +60,7 @@ namespace InventorySystem
 		public static void StopListening(string eventName, UnityAction listener)
 		{
 			UnityEvent thisEvent;
-			if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
+			if (_isApplicationQuitting == false && Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
 			{
 				thisEvent.RemoveListener(listener);
 			}

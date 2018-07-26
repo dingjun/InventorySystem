@@ -6,43 +6,105 @@ namespace InventorySystem
 {
 	public class InventoryController : MonoBehaviour
 	{
-		private List<Item> _items;
+		private const int MINIMUM_NUMBER_ROWS = 4;
 
-		public List<Item> Items
+		private List<InventoryRow> _rows;
+
+		public List<InventoryRow> Rows
 		{
 			get
 			{
-				return _items;
+				return _rows;
 			}
 		}
 
+		public bool IsFull
+		{
+			get
+			{
+				foreach (var row in _rows)
+				{
+					if (row.IsFull == false)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		
 		// Use this for initialization
 		void Start()
 		{
-			_items = new List<Item>();
+			_rows = new List<InventoryRow>();
+			for (int i = 0; i < MINIMUM_NUMBER_ROWS; ++i)
+			{
+				AddRow();
+			}
 		}
 
-		private void PrintAll()
+		public override string ToString()
 		{
-			string message = "";
-			for (int i = 0; i < _items.Count; ++i)
+			string text = "";
+			foreach (var row in _rows)
 			{
-				message += i.ToString() + ". " + _items[i].Name + "\n";
+				text += row.ToString() + "\n";
 			}
-			Debug.Log(message);
+			return text;
+		}
+
+		private void AddRow()
+		{
+			_rows.Add(new InventoryRow());
+		}
+
+		private int GetAvailableRowIndex()
+		{
+			for (int i = 0; i < _rows.Count; ++i)
+			{
+				if (_rows[i].IsFull == false)
+				{
+					return i;
+				}
+			}
+
+			AddRow();
+			return _rows.Count - 1;
+		}
+
+		private void UpdateCapacity()
+		{
+			while (_rows.Count > MINIMUM_NUMBER_ROWS)
+			{
+				int lastIndex = _rows.Count - 1;
+				if (_rows[lastIndex].IsEmpty == false)
+				{
+					break;
+				}
+				_rows.RemoveAt(lastIndex);
+			}
 		}
 
 		public void AddItem(Item item)
 		{
 			Debug.Assert(item is IPickupable);
-			_items.Add(item);
-			PrintAll();
+			_rows[GetAvailableRowIndex()].AddItem(item);
+
+			// TODO: with specified spot
+
+			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
+
+			Debug.Log(this.ToString());
 		}
 
-		public void RemoveItem(Item item)
+		public void RemoveItem(int rowIndex, int itemIndex)
 		{
-			_items.Remove(item);
-			PrintAll();
+			_rows[rowIndex].RemoveItem(itemIndex);
+			UpdateCapacity();
+
+			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
+
+			Debug.Log(this.ToString());
 		}
 	}
 }
