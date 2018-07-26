@@ -10,6 +10,7 @@ namespace InventorySystem
 		private List<AttributeEntry> _entries;
 		
 		public GameObject AttributeEntryPrefab;
+		public Transform AttributeEntryParent;
 
 		private void Awake()
 		{
@@ -18,11 +19,9 @@ namespace InventorySystem
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerStats = player.GetComponent<AttributeController>();
 
-			float height = AttributeEntryPrefab.GetComponent<RectTransform>().rect.height;
 			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{
-				GameObject entry = Instantiate(AttributeEntryPrefab, transform);
-				entry.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, i * height, height);
+				GameObject entry = Instantiate(AttributeEntryPrefab, AttributeEntryParent);
 				_entries.Add(entry.GetComponent<AttributeEntry>());
 			}
 		}
