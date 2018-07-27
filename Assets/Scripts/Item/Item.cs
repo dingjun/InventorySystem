@@ -35,6 +35,13 @@ namespace InventorySystem
 			}
 		}
 
+		public override string ToString()
+		{
+			return "Name: " + Name;
+
+			// TODO
+		}
+
 		protected void ApplyBuff(AttributeController _playerStats)
 		{
 			Debug.Log("ApplyBuff " + Name);

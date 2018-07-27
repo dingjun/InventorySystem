@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
+	[System.Serializable]
 	public class EquipableItem : Item, IPickupable, IEquipable
 	{
 		private Equipment.EquipmentType _equipmentType;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
+	[System.Serializable]
 	public class UsableItem : Item, IUsable
 	{
 		public void OnUse(AttributeController _playerStats)

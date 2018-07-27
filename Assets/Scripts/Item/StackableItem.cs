@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
+	[System.Serializable]
 	public class StackableItem : Item, IPickupable, IStackable
 	{
 		private const int NO_STACK_LIMIT = Int32.MaxValue;

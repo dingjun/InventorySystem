@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
+	[System.Serializable]
 	public class PickupableItem : Item, IPickupable
 	{
 		public void OnPutInInventory(InventoryController playerInventory)

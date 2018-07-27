@@ -53,6 +53,7 @@ GameObject:
   - component: {fileID: 224742124926935778}
   - component: {fileID: 222072146812615640}
   - component: {fileID: 114910559122722472}
+  - component: {fileID: 225385914089499464}
   m_Layer: 5
   m_Name: TextICount
   m_TagString: Untagged
@@ -318,3 +319,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &225385914089499464
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1486148506019512}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0

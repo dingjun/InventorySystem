@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace InventorySystem
 {
-	public class ItemIcon : MonoBehaviour, IPointerClickHandler
+	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
 		private PlayerController _playerController;
 		private int _rowIndex;
@@ -90,6 +90,16 @@ namespace InventorySystem
 			{
 				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Consume, this);
 			}
+		}
+
+		public void OnPointerEnter(PointerEventData eventData)
+		{
+			_playerController.UpdateTooltip(_item);
+		}
+
+		public void OnPointerExit(PointerEventData eventData)
+		{
+			_playerController.UpdateTooltip();
 		}
 	}
 }
