@@ -22,7 +22,7 @@ namespace InventorySystem
 
 		public void SetInformation(PlayerController playerController, int slotIndex)
 		{
-			Slot.SetInformation(playerController, EQUIPMENT_SLOT_ROW_INDEX, slotIndex);
+			Slot.SetInformation(playerController, new ItemPosition(EQUIPMENT_SLOT_ROW_INDEX, slotIndex));
 		}
 
 		public void UpdateSlot(Equipment equipment)

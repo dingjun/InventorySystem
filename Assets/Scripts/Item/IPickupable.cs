@@ -8,7 +8,7 @@ namespace InventorySystem
 	{
 		void OnPutInInventory(InventoryController playerInventory);
 
-		void OnRemoveFromInventory(InventoryController playerInventory, int rowIndex, int slotIndex);
+		void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition);
 
 		void OnPutInAir(PlayerController playerController);
 

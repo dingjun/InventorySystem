@@ -12,7 +12,7 @@ namespace InventorySystem
 		{
 			for (int i = 0; i < Slots.Length; ++i)
 			{
-				Slots[i].SetInformation(playerController, rowIndex, i);
+				Slots[i].SetInformation(playerController, new ItemPosition(rowIndex, i));
 			}
 		}
 

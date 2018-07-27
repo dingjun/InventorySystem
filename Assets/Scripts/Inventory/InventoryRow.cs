@@ -8,8 +8,6 @@ namespace InventorySystem
 	{
 		public const int NUMBER_SLOTS = 4;
 
-		private const int ANY_INDEX = -1;
-
 		private Item[] _items = new Item[NUMBER_SLOTS];
 
 		public Item[] Items
@@ -67,10 +65,11 @@ namespace InventorySystem
 			return text;
 		}
 
-		public void AddItem(Item item, int index = ANY_INDEX)
+		public void AddItem(Item item, int? index = null)
 		{
 			Debug.Assert(item is IPickupable);
-			if (index == ANY_INDEX)
+
+			if (index == null)
 			{
 				Debug.Assert(IsFull == false);
 				for (int i = 0; i < NUMBER_SLOTS; ++i)
@@ -84,7 +83,7 @@ namespace InventorySystem
 			}
 			else
 			{
-				_items[index] = item;
+				_items[index.GetValueOrDefault()] = item;
 			}
 		}
 

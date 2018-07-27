@@ -9,8 +9,7 @@ namespace InventorySystem
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
 		private PlayerController _playerController;
-		private int _rowIndex;
-		private int _slotIndex;
+		private ItemPosition _itemPosition;
 		private Item _item;		// TODO: remove
 
 		public Image ItemImage;
@@ -29,19 +28,11 @@ namespace InventorySystem
 			}
 		}
 
-		public int RowIndex
+		public ItemPosition Position
 		{
 			get
 			{
-				return _rowIndex;
-			}
-		}
-
-		public int SlotIndex
-		{
-			get
-			{
-				return _slotIndex;
+				return _itemPosition;
 			}
 		}
 
@@ -49,7 +40,7 @@ namespace InventorySystem
 		{
 			get
 			{
-				return _rowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX;
+				return _itemPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX;
 			}
 		}
 
@@ -69,11 +60,10 @@ namespace InventorySystem
 			}
 		}
 
-		public void SetInformation(PlayerController playerController, int rowIndex, int slotIndex)
+		public void SetInformation(PlayerController playerController, ItemPosition itemPosition)
 		{
 			_playerController = playerController;
-			_rowIndex = rowIndex;
-			_slotIndex = slotIndex;
+			_itemPosition = itemPosition;
 		}
 
 		public void OnPointerClick(PointerEventData eventData)

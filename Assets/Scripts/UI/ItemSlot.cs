@@ -16,9 +16,9 @@ namespace InventorySystem
 			}
 		}
 
-		public void SetInformation(PlayerController playerController, int rowIndex, int slotIndex)
+		public void SetInformation(PlayerController playerController, ItemPosition itemPosition)
 		{
-			Icon.SetInformation(playerController, rowIndex, slotIndex);
+			Icon.SetInformation(playerController, itemPosition);
 		}
 
 		public void UpdateSlot(Item item)

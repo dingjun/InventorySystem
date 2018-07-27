@@ -17,8 +17,8 @@ namespace InventorySystem
 		private InventoryController _inventory;
 		private EquipmentController _equipment;
 		private AttributeController _stats;
-		private Item _airItem;
-		
+		private AirItemController _airItem;
+
 		// Use this for initialization
 		void Start()
 		{
@@ -30,6 +30,7 @@ namespace InventorySystem
 			_inventory = GetComponent<InventoryController>();
 			_equipment = GetComponent<EquipmentController>();
 			_stats = GetComponent<AttributeController>();
+			_airItem = GetComponent<AirItemController>();
 		}
 
 		void FixedUpdate()
@@ -127,7 +128,7 @@ namespace InventorySystem
 					}
 					else
 					{
-						pickupable.OnRemoveFromInventory(_inventory, itemIcon.RowIndex, itemIcon.SlotIndex);
+						pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
 					}
 					break;
 				}
@@ -149,7 +150,7 @@ namespace InventorySystem
 					else
 					{
 						equipable.OnEquip(_equipment, _stats);
-						pickupable.OnRemoveFromInventory(_inventory, itemIcon.RowIndex, itemIcon.SlotIndex);
+						pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
 					}
 					break;
 				}
@@ -162,6 +163,6 @@ namespace InventorySystem
 					break;
 				}
 			}
-		}		
+		}
 	}
 }

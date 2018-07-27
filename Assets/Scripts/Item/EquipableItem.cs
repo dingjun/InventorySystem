@@ -23,10 +23,10 @@ namespace InventorySystem
 			playerInventory.AddItem((Item)MemberwiseClone());
 		}
 
-		public void OnRemoveFromInventory(InventoryController playerInventory, int rowIndex, int slotIndex)
+		public void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition)
 		{
 			Debug.Log("RemoveFromInventory " + Name);
-			playerInventory.RemoveItem(rowIndex, slotIndex);
+			playerInventory.RemoveItem(itemPosition);
 		}
 
 		public void OnPutInAir(PlayerController playerController)

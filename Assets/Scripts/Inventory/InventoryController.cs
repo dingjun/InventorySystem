@@ -84,21 +84,28 @@ namespace InventorySystem
 			}
 		}
 
-		public void AddItem(Item item)
+		public void AddItem(Item item, ItemPosition? itemPosition = null)
 		{
 			Debug.Assert(item is IPickupable);
-			_rows[GetAvailableRowIndex()].AddItem(item);
 
-			// TODO: with specified spot
-
+			if (itemPosition == null)
+			{
+				_rows[GetAvailableRowIndex()].AddItem(item);
+			}
+			else
+			{
+				ItemPosition position = itemPosition.GetValueOrDefault();
+				_rows[position.RowIndex].AddItem(item, position.SlotIndex);
+			}
+			
 			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
 
 			Debug.Log(this.ToString());
 		}
 
-		public void RemoveItem(int rowIndex, int itemIndex)
+		public void RemoveItem(ItemPosition itemPosition)
 		{
-			_rows[rowIndex].RemoveItem(itemIndex);
+			_rows[itemPosition.RowIndex].RemoveItem(itemPosition.SlotIndex);
 			UpdateCapacity();
 
 			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
