@@ -97,7 +97,7 @@ namespace InventorySystem
 				ItemPosition position = itemPosition.GetValueOrDefault();
 				_rows[position.RowIndex].AddItem(item, position.SlotIndex);
 			}
-			
+
 			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
 
 			Debug.Log(this.ToString());

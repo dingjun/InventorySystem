@@ -29,11 +29,6 @@ namespace InventorySystem
 			}
 		}
 
-		public void OnPutInInventory()
-		{
-
-		}
-
 		public void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null)
 		{
 			Debug.Log("PutInInventory " + Name);

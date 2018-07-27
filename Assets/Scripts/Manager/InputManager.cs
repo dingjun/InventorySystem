@@ -5,16 +5,7 @@ using UnityEngine;
 namespace InventorySystem
 {
 	public class InputManager : MonoBehaviour
-	{
-		private PlayerController _playerController;
-
-		// Use this for initialization
-		void Start()
-		{
-			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
-			_playerController = player.GetComponent<PlayerController>();
-		}
-		
+	{	
 		// Update is called once per frame
 		void Update()
 		{
@@ -71,7 +62,8 @@ namespace InventorySystem
 				Collider2D hitCollider = Physics2D.OverlapPoint(mouseWorldPosition, LayerMask.GetMask(Constant.LAYER_ITEM));
 				if (hitCollider)
 				{
-					_playerController.Interact(hitCollider.transform);
+					object[] eventParams = { (object)(hitCollider.transform) };
+					EventManager.TriggerEvent(EventName.CLICK_ITEM_OBJECT, eventParams);
 				}
 			}
 		}

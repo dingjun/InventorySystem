@@ -6,8 +6,6 @@ namespace InventorySystem
 {
 	public class PlayerController : MonoBehaviour
 	{
-		public enum ItemAction { Select, Equip, Consume };
-
 		private const float SPEED = 3f;
 		private const float PROXIMITY_SQUARE = 9f;
 
@@ -33,7 +31,23 @@ namespace InventorySystem
 			_airItem = GetComponent<AirItemController>();
 		}
 
-		void FixedUpdate()
+		private void OnEnable()
+		{
+			EventManager.StartListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
+			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
+			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+		}
+
+		private void OnDisable()
+		{
+			EventManager.StopListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
+			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
+			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+		}
+
+		private void FixedUpdate()
 		{
 			// velocity
 			Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -90,8 +104,11 @@ namespace InventorySystem
 			}
 		}
 
-		public void Interact(Transform other)
+		private void ClickItemObject(object[] eventParams)
 		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is Transform);
+			Transform other = (Transform)eventParams[0];
+
 			if (_pickupOption.Option != PickupOptionController.PickupOption.Option1)
 			{
 				return;
@@ -103,7 +120,7 @@ namespace InventorySystem
 				Debug.Log("Out of Proximity");
 				return;
 			}
-			
+
 			Item item = other.GetComponent<Item>();
 			if (item != null)
 			{
@@ -111,64 +128,55 @@ namespace InventorySystem
 			}
 		}
 
-		public void InteractWithItemIcon(ItemAction itemAction, ItemIcon itemIcon)
+		private void LeftClickItemIcon(object[] eventParams)
 		{
-			switch (itemAction)
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			IPickupable pickupable = itemIcon.Item as IPickupable;
+			IEquipable equipable = itemIcon.Item as IEquipable;
+			if (itemIcon.IsEquipmentIcon)
 			{
-			case ItemAction.Select:
-				{
-					// TODO
-
-					// drop for now
-					IPickupable pickupable = itemIcon.Item as IPickupable;
-					IEquipable equipable = itemIcon.Item as IEquipable;
-					if (itemIcon.IsEquipmentIcon)
-					{
-						equipable.OnUnequip(_equipment, _stats);
-					}
-					else
-					{
-						pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
-					}
-					break;
-				}
-			case ItemAction.Equip:
-				{
-					IPickupable pickupable = itemIcon.Item as IPickupable;
-					IEquipable equipable = itemIcon.Item as IEquipable;
-					
-					if (equipable == null)
-					{
-						return;
-					}
-
-					if (itemIcon.IsEquipmentIcon)
-					{
-						equipable.OnUnequip(_equipment, _stats);
-						pickupable.OnPutInInventory(_inventory);
-					}
-					else
-					{
-						Item equippedItem = _equipment.EquipmentTable[equipable.EquipmentType].Item;
-						pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
-						if (equippedItem != null)
-						{
-							((IEquipable)equippedItem).OnUnequip(_equipment, _stats);
-							((IPickupable)equippedItem).OnPutInInventory(_inventory, itemIcon.Position);
-						}
-						equipable.OnEquip(_equipment, _stats);
-					}
-					break;
-				}
-			case ItemAction.Consume:
-				{
-					Debug.Log("Consume " + itemIcon.Item.Name);
-
-					// TODO
-
-					break;
-				}
+				equipable.OnUnequip(_equipment, _stats);
 			}
+			else
+			{
+				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+			}
+		}
+
+		private void RightClickItemIcon(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			IPickupable pickupable = itemIcon.Item as IPickupable;
+			IEquipable equipable = itemIcon.Item as IEquipable;
+
+			if (equipable == null)
+			{
+				return;
+			}
+
+			if (itemIcon.IsEquipmentIcon)
+			{
+				equipable.OnUnequip(_equipment, _stats);
+				pickupable.OnPutInInventory(_inventory);
+			}
+			else
+			{
+				Item equippedItem = _equipment.EquipmentTable[equipable.EquipmentType].Item;
+				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+				if (equippedItem != null)
+				{
+					((IEquipable)equippedItem).OnUnequip(_equipment, _stats);
+					((IPickupable)equippedItem).OnPutInInventory(_inventory, itemIcon.Position);
+				}
+				equipable.OnEquip(_equipment, _stats);
+			}
+		}
+
+		private void MiddleClickItemIcon(object[] eventParams)
+		{
+			// TODO
 		}
 	}
 }

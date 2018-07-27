@@ -48,7 +48,6 @@ namespace InventorySystem
 		private void SetPickupOption(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is PickupOption);
-
 			Option = (PickupOption)eventParams[0];
 		}
 	}

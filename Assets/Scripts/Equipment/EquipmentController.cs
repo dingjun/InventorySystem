@@ -8,7 +8,6 @@ namespace InventorySystem
 	public class EquipmentController : MonoBehaviour
 	{
 		private Dictionary<Equipment.EquipmentType, Equipment> _equipmentTable;
-		private InventoryController _playerInventory;
 
 		public Dictionary<Equipment.EquipmentType, Equipment> EquipmentTable
 		{
@@ -25,8 +24,6 @@ namespace InventorySystem
 			{
 				_equipmentTable.Add(type, new Equipment(type));
 			}
-			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
-			_playerInventory = player.GetComponent<InventoryController>();
 		}
 
 		public override string ToString()
@@ -44,14 +41,6 @@ namespace InventorySystem
 			Debug.Assert(item is IEquipable);
 
 			Equipment.EquipmentType type = ((IEquipable)item).EquipmentType;
-
-			// put original equipment back to inventory
-			if (_equipmentTable[type].IsEmpty == false)
-			{
-				_playerInventory.AddItem(_equipmentTable[type].Item);
-			}
-
-			// equip new item
 			_equipmentTable[type].AddItem(item);
 
 			EventManager.TriggerEvent(EventName.UPDATE_EQUIPMENT);

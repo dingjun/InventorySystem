@@ -7,7 +7,6 @@ namespace InventorySystem
 	public class EquipmentScreen : MonoBehaviour
 	{
 		private EquipmentController _playerEquipment;
-		private PlayerController _playerController;
 		private List<EquipmentSlot> _slots;
 
 		public GameObject EquipmentSlotPrefab;
@@ -18,14 +17,13 @@ namespace InventorySystem
 			_slots = new List<EquipmentSlot>();
 
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
-			_playerController = player.GetComponent<PlayerController>();
 			_playerEquipment = player.GetComponent<EquipmentController>();
 
 			for (int i = 0; i < _playerEquipment.EquipmentTable.Count; ++i)
 			{
 				GameObject slot = Instantiate(EquipmentSlotPrefab, EquipmentSlotParent);
 				_slots.Add(slot.GetComponent<EquipmentSlot>());
-				_slots[i].SetInformation(_playerController, i);
+				_slots[i].SetPosition(i);
 			}
 		}
 

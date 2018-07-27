@@ -7,7 +7,6 @@ namespace InventorySystem
 	public class InventoryScreen : MonoBehaviour
 	{
 		private InventoryController _playerInventory;
-		private PlayerController _playerController;
 		private List<InventoryRowEntry> _entries;
 
 		public GameObject InventoryRowPrefab;
@@ -19,7 +18,6 @@ namespace InventorySystem
 
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerInventory = player.GetComponent<InventoryController>();
-			_playerController = player.GetComponent<PlayerController>();
 		}
 
 		private void OnEnable()
@@ -50,7 +48,7 @@ namespace InventorySystem
 				{
 					GameObject entry = Instantiate(InventoryRowPrefab, InventoryRowParent);
 					_entries.Add(entry.GetComponent<InventoryRowEntry>());
-					_entries[i].SetInformation(_playerController, i);
+					_entries[i].SetPosition(i);
 				}
 
 				// update

@@ -8,7 +8,6 @@ namespace InventorySystem
 {
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
-		private PlayerController _playerController;
 		private ItemPosition _itemPosition;
 		private Item _item;		// TODO: remove
 
@@ -60,25 +59,25 @@ namespace InventorySystem
 			}
 		}
 
-		public void SetInformation(PlayerController playerController, ItemPosition itemPosition)
+		public void SetPosition(ItemPosition itemPosition)
 		{
-			_playerController = playerController;
 			_itemPosition = itemPosition;
 		}
 
 		public void OnPointerClick(PointerEventData eventData)
 		{
+			object[] eventParams = { (object)this };
 			if (eventData.button == PointerEventData.InputButton.Left)
 			{
-				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Select, this);
+				EventManager.TriggerEvent(EventName.LEFT_CLICK_ITEM_ICON, eventParams);
 			}
 			if (eventData.button == PointerEventData.InputButton.Right)
 			{
-				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Equip, this);
+				EventManager.TriggerEvent(EventName.RIGHT_CLICK_ITEM_ICON, eventParams);
 			}
 			if (eventData.button == PointerEventData.InputButton.Middle)
 			{
-				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Consume, this);
+				EventManager.TriggerEvent(EventName.MIDDLE_CLICK_ITEM_ICON, eventParams);
 			}
 		}
 
