@@ -144,13 +144,19 @@ namespace InventorySystem
 
 					if (itemIcon.IsEquipmentIcon)
 					{
-						pickupable.OnPutInInventory(_inventory);
 						equipable.OnUnequip(_equipment, _stats);
+						pickupable.OnPutInInventory(_inventory);
 					}
 					else
 					{
-						equipable.OnEquip(_equipment, _stats);
+						Item equippedItem = _equipment.EquipmentTable[equipable.EquipmentType].Item;
 						pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+						if (equippedItem != null)
+						{
+							((IEquipable)equippedItem).OnUnequip(_equipment, _stats);
+							((IPickupable)equippedItem).OnPutInInventory(_inventory, itemIcon.Position);
+						}
+						equipable.OnEquip(_equipment, _stats);
 					}
 					break;
 				}

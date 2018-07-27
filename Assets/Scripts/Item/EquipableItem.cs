@@ -17,10 +17,10 @@ namespace InventorySystem
 			}
 		}
 
-		public void OnPutInInventory(InventoryController playerInventory)
+		public void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null)
 		{
 			Debug.Log("PutInInventory " + Name);
-			playerInventory.AddItem((Item)MemberwiseClone());
+			playerInventory.AddItem((Item)MemberwiseClone(), itemPosition);
 		}
 
 		public void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition)

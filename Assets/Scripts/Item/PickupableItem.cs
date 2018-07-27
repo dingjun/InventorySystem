@@ -7,10 +7,10 @@ namespace InventorySystem
 	[System.Serializable]
 	public class PickupableItem : Item, IPickupable
 	{
-		public void OnPutInInventory(InventoryController playerInventory)
+		public void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null)
 		{
 			Debug.Log("PutInInventory " + Name);
-			playerInventory.AddItem((Item)MemberwiseClone());
+			playerInventory.AddItem((Item)MemberwiseClone(), itemPosition);
 		}
 
 		public void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition)

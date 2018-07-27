@@ -6,7 +6,7 @@ namespace InventorySystem
 {
 	public interface IPickupable
 	{
-		void OnPutInInventory(InventoryController playerInventory);
+		void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null);
 
 		void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition);
 
