@@ -6,17 +6,26 @@ namespace InventorySystem
 {
 	public class PickupableItem : Item, IPickupable
 	{
-		public void OnPickup(InventoryController playerInventory)
+		public void OnPutInInventory(InventoryController playerInventory)
 		{
-			Debug.Log("Pickup " + Name);
+			Debug.Log("PutInInventory " + Name);
 			playerInventory.AddItem((Item)MemberwiseClone());
-			Destroy(gameObject);
 		}
 
-		public void OnDrop(InventoryController playerInventory, int rowIndex, int slotIndex)
+		public void OnRemoveFromInventory(InventoryController playerInventory, int rowIndex, int slotIndex)
 		{
-			Debug.Log("Drop " + Name);
+			Debug.Log("RemoveFromInventory " + Name);
 			playerInventory.RemoveItem(rowIndex, slotIndex);
+		}
+
+		public void OnPutOnGround()
+		{
+			// TODO
+		}
+
+		public void OnRemoveFromGround()
+		{
+			Destroy(gameObject);
 		}
 
 		public static PickupableItem Attach(GameObject itemObject, string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)

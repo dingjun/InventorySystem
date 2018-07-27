@@ -8,7 +8,7 @@ namespace InventorySystem
 	{
 		private const int NUMBER_GROUND_LINES = 24;
 		private const int NUMBER_ROCKS = 3;
-		private const int NUMBER_SPAWNING_ITEMS = 3;
+		private const int NUMBER_SPAWNING_ITEMS = 18;
 
 		public Transform TileParent;
 		public Transform ItemParent;
@@ -82,7 +82,7 @@ namespace InventorySystem
 			for (int i = 0; i < NUMBER_SPAWNING_ITEMS; ++i)
 			{
 				GameObject itemObject = Instantiate(ItemPrefab, RandomCoordinates, Quaternion.identity, ItemParent);
-				Item item = ItemDB.AttachItemComponent(itemObject, Random.Range(0, ItemDatabase.NUMBER_ITEM_TYPE));
+				Item item = ItemDB.AttachItemComponent(itemObject, i);
 				itemObject.GetComponent<SpriteRenderer>().sprite = item.Icon;
 			}
 		}

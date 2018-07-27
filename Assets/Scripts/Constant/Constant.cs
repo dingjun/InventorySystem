@@ -6,6 +6,8 @@ namespace InventorySystem
 {
 	public static class Constant
 	{
+		//public enum ItemDestination { None, Ground, Inventory, Equipment };
+
 		public const string TAG_PLAYER = "Player";
 		public const string LAYER_ITEM = "Item";
 	}

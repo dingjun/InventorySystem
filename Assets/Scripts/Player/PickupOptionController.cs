@@ -22,10 +22,14 @@ namespace InventorySystem
 				{
 				case PickupOption.Option1:
 				case PickupOption.Option2:
-					_option = value;
-					return;
+					{
+						_option = value;
+						return;
+					}
 				default:
-					return;
+					{
+						return;
+					}
 				}
 			}
 		}

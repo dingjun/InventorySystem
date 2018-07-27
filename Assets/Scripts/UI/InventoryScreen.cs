@@ -7,17 +7,19 @@ namespace InventorySystem
 	public class InventoryScreen : MonoBehaviour
 	{
 		private InventoryController _playerInventory;
+		private PlayerController _playerController;
 		private List<InventoryRowEntry> _entries;
 
-		public GameObject RowEntryPrefab;
-		public Transform RowEntryParent;
+		public GameObject InventoryRowPrefab;
+		public Transform InventoryRowParent;
 
-		void Awake()
+		private void Awake()
 		{
 			_entries = new List<InventoryRowEntry>();
 
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerInventory = player.GetComponent<InventoryController>();
+			_playerController = player.GetComponent<PlayerController>();
 		}
 
 		private void OnEnable()
@@ -38,7 +40,7 @@ namespace InventorySystem
 			{
 				int index = _entries.Count - 1;
 				_entries.RemoveAt(index);
-				Destroy(RowEntryParent.GetChild(index).gameObject);
+				Destroy(InventoryRowParent.GetChild(index).gameObject);
 			}
 			
 			for (int i = 0; i < _playerInventory.Rows.Count; ++i)
@@ -46,9 +48,9 @@ namespace InventorySystem
 				// add rows
 				if (i == _entries.Count)
 				{
-					GameObject entry = Instantiate(RowEntryPrefab, RowEntryParent);
+					GameObject entry = Instantiate(InventoryRowPrefab, InventoryRowParent);
 					_entries.Add(entry.GetComponent<InventoryRowEntry>());
-					_entries[i].SetInformation(_playerInventory, i);
+					_entries[i].SetInformation(_playerController, i);
 				}
 
 				// update

@@ -18,7 +18,7 @@ namespace InventorySystem
 		private int _newMaxValue;
 		private List<AttributeBuff> _buffs;
 
-		public string Name
+		public string Type
 		{
 			get
 			{
@@ -114,12 +114,11 @@ namespace InventorySystem
 				{
 					_newCurrentValue = buff.CalculateNewAttributeValue(_newCurrentValue);
 				}
-				else    // buff.Target == AttributeBuff.BuffTarget.Maximum
+				else if (buff.Target == AttributeBuff.BuffTarget.Maximum)
 				{
 					Debug.Assert(IsSpendable);
 					_newMaxValue = buff.CalculateNewAttributeValue(_newMaxValue);
 				}
-				
 			}
 
 			Mathf.Clamp(_newCurrentValue, 0, _newMaxValue);

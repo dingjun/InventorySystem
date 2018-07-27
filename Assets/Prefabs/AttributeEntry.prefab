@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 222315387312943686}
   - component: {fileID: 114150469445982302}
   m_Layer: 5
-  m_Name: Buff
+  m_Name: TextBuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 222270825170550972}
   - component: {fileID: 114158197680410144}
   m_Layer: 5
-  m_Name: Value
+  m_Name: TextValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 222067536433876460}
   - component: {fileID: 114178403692383796}
   m_Layer: 5
-  m_Name: Name
+  m_Name: TextType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33fc0018be058f649b1cec06be3ebaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: {fileID: 114178403692383796}
+  Type: {fileID: 114178403692383796}
   Value: {fileID: 114158197680410144}
   Buff: {fileID: 114150469445982302}
 --- !u!114 &114150469445982302

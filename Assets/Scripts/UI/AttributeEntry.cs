@@ -7,13 +7,13 @@ namespace InventorySystem
 {
 	public class AttributeEntry : MonoBehaviour
 	{
-		public Text Name;
+		public Text Type;
 		public Text Value;
 		public Text Buff;
 
 		public void SetText(Attribute attribute)
 		{
-			Name.text = attribute.Name;
+			Type.text = attribute.Type;
 
 			if (attribute.IsSpendable)
 			{

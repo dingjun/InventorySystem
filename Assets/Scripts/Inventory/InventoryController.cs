@@ -33,8 +33,7 @@ namespace InventorySystem
 			}
 		}
 		
-		// Use this for initialization
-		void Start()
+		private void Awake()
 		{
 			_rows = new List<InventoryRow>();
 			for (int i = 0; i < MINIMUM_NUMBER_ROWS; ++i)
@@ -45,7 +44,7 @@ namespace InventorySystem
 
 		public override string ToString()
 		{
-			string text = "";
+			string text = "==== INVENTORY ====\n";
 			foreach (var row in _rows)
 			{
 				text += row.ToString() + "\n";

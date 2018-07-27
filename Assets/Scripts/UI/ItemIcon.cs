@@ -8,7 +8,7 @@ namespace InventorySystem
 {
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler
 	{
-		private InventoryController _playerInventory;
+		private PlayerController _playerController;
 		private int _rowIndex;
 		private int _slotIndex;
 		private Item _item;
@@ -29,6 +29,30 @@ namespace InventorySystem
 			}
 		}
 
+		public int RowIndex
+		{
+			get
+			{
+				return _rowIndex;
+			}
+		}
+
+		public int SlotIndex
+		{
+			get
+			{
+				return _slotIndex;
+			}
+		}
+
+		public bool IsEquipmentIcon
+		{
+			get
+			{
+				return _rowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX;
+			}
+		}
+
 		private void UpdateIcon()
 		{
 			if (_item == null)
@@ -45,9 +69,9 @@ namespace InventorySystem
 			}
 		}
 
-		public void SetInformation(InventoryController playerInventory, int rowIndex, int slotIndex)
+		public void SetInformation(PlayerController playerController, int rowIndex, int slotIndex)
 		{
-			_playerInventory = playerInventory;
+			_playerController = playerController;
 			_rowIndex = rowIndex;
 			_slotIndex = slotIndex;
 		}
@@ -56,16 +80,15 @@ namespace InventorySystem
 		{
 			if (eventData.button == PointerEventData.InputButton.Left)
 			{
-				// TODO: toggle move
-				((PickupableItem)_item).OnDrop(_playerInventory, _rowIndex, _slotIndex);
+				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Select, this);
 			}
 			else if (eventData.button == PointerEventData.InputButton.Right)
 			{
-				// TODO: toggle equip
+				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Equip, this);
 			}
-			else    // eventData.button == PointerEventData.InputButton.Middle
+			else if (eventData.button == PointerEventData.InputButton.Middle)
 			{
-				// TODO: consume
+				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Consume, this);
 			}
 		}
 	}

@@ -8,11 +8,11 @@ namespace InventorySystem
 	{
 		public ItemSlot[] Slots;
 
-		public void SetInformation(InventoryController playerInventory, int rowIndex)
+		public void SetInformation(PlayerController playerController, int rowIndex)
 		{
 			for (int i = 0; i < Slots.Length; ++i)
 			{
-				Slots[i].SetInformation(playerInventory, rowIndex, i);
+				Slots[i].SetInformation(playerController, rowIndex, i);
 			}
 		}
 

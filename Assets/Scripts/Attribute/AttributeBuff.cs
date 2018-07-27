@@ -71,10 +71,12 @@ namespace InventorySystem
 			{
 				return attributeValue + _value;
 			}
-			else	// Type == BuffType.Percentage
+			else if (Type == BuffType.Percentage)
 			{
 				return (int)(attributeValue * (1 + _value / 100f));
 			}
+			Debug.Assert(false);
+			return 0;
 		}
 	}
 }

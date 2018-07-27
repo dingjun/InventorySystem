@@ -6,6 +6,8 @@ namespace InventorySystem
 {
 	public class PlayerController : MonoBehaviour
 	{
+		public enum ItemAction { Select, Equip, Consume };
+
 		private const float SPEED = 3f;
 		private const float PROXIMITY_SQUARE = 9f;
 
@@ -13,6 +15,7 @@ namespace InventorySystem
 		private Animator _animator;
 		private PickupOptionController _pickupOption;
 		private InventoryController _inventory;
+		private EquipmentController _equipment;
 		private AttributeController _stats;
 
 		// Use this for initialization
@@ -24,6 +27,7 @@ namespace InventorySystem
 
 			_pickupOption = GetComponent<PickupOptionController>();
 			_inventory = GetComponent<InventoryController>();
+			_equipment = GetComponent<EquipmentController>();
 			_stats = GetComponent<AttributeController>();
 		}
 
@@ -56,19 +60,31 @@ namespace InventorySystem
 			Item item = other.GetComponent<Item>();
 			if (item != null)
 			{
-				InteractWithItem(item);
+				InteractWithItemObject(item);
 			}
 		}
 
-		private void InteractWithItem(Item item)
+		private void InteractWithItemObject(Item item)
 		{
-			if (item is IPickupable)
+			IUsable usable = item as IUsable;
+			IPickupable pickupable = item as IPickupable;
+			IEquipable equipable = item as IEquipable;
+
+			if (usable != null)
 			{
-				((IPickupable)item).OnPickup(_inventory);
+				usable.OnUse(_stats);
 			}
-			if (item is IUsable)
+			else if (pickupable != null)
 			{
-				((IUsable)item).OnUse(_stats);
+				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
+				{
+					equipable.OnEquip(_equipment, _stats);
+				}
+				else
+				{
+					pickupable.OnPutInInventory(_inventory);
+				}
+				pickupable.OnRemoveFromGround();
 			}
 		}
 
@@ -89,7 +105,61 @@ namespace InventorySystem
 			Item item = other.GetComponent<Item>();
 			if (item != null)
 			{
-				InteractWithItem(item);
+				InteractWithItemObject(item);
+			}
+		}
+
+		public void InteractWithItemIcon(ItemAction itemAction, ItemIcon itemIcon)
+		{
+			switch (itemAction)
+			{
+			case ItemAction.Select:
+				{
+					// TODO
+
+					// drop for now
+					IPickupable pickupable = itemIcon.Item as IPickupable;
+					IEquipable equipable = itemIcon.Item as IEquipable;
+					if (itemIcon.IsEquipmentIcon)
+					{
+						equipable.OnUnequip(_equipment, _stats);
+					}
+					else
+					{
+						pickupable.OnRemoveFromInventory(_inventory, itemIcon.RowIndex, itemIcon.SlotIndex);
+					}
+					break;
+				}
+			case ItemAction.Equip:
+				{
+					IPickupable pickupable = itemIcon.Item as IPickupable;
+					IEquipable equipable = itemIcon.Item as IEquipable;
+					
+					if (equipable == null)
+					{
+						return;
+					}
+
+					if (itemIcon.IsEquipmentIcon)
+					{
+						pickupable.OnPutInInventory(_inventory);
+						equipable.OnUnequip(_equipment, _stats);
+					}
+					else
+					{
+						equipable.OnEquip(_equipment, _stats);
+						pickupable.OnRemoveFromInventory(_inventory, itemIcon.RowIndex, itemIcon.SlotIndex);
+					}
+					break;
+				}
+			case ItemAction.Consume:
+				{
+					Debug.Log("Consume " + itemIcon.Item.Name);
+
+					// TODO
+
+					break;
+				}
 			}
 		}
 	}
