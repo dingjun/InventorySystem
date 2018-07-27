@@ -33,11 +33,23 @@ namespace InventorySystem
 				}
 			}
 		}
-
-		// Use this for initialization
-		void Start()
+		
+		private void OnEnable()
 		{
+			EventManager.StartListening(EventName.SET_PICKUP_OPTION, SetPickupOption);
 			Option = PickupOption.Option1;
+		}
+
+		private void OnDisable()
+		{
+			EventManager.StopListening(EventName.SET_PICKUP_OPTION, SetPickupOption);
+		}
+
+		private void SetPickupOption(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is PickupOption);
+
+			Option = (PickupOption)eventParams[0];
 		}
 	}
 }

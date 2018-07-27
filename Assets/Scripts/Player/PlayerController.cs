@@ -17,9 +17,8 @@ namespace InventorySystem
 		private InventoryController _inventory;
 		private EquipmentController _equipment;
 		private AttributeController _stats;
-
-		public Tooltip ItemTooltip;
-
+		private Item _airItem;
+		
 		// Use this for initialization
 		void Start()
 		{
@@ -163,11 +162,6 @@ namespace InventorySystem
 					break;
 				}
 			}
-		}
-
-		public void UpdateTooltip(Item item = null)
-		{
-			ItemTooltip.UpdateTooltip(item);
-		}
+		}		
 	}
 }

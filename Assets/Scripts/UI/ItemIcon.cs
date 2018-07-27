@@ -11,7 +11,7 @@ namespace InventorySystem
 		private PlayerController _playerController;
 		private int _rowIndex;
 		private int _slotIndex;
-		private Item _item;
+		private Item _item;		// TODO: remove
 
 		public Image ItemImage;
 		public Text ItemCount;
@@ -82,11 +82,11 @@ namespace InventorySystem
 			{
 				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Select, this);
 			}
-			else if (eventData.button == PointerEventData.InputButton.Right)
+			if (eventData.button == PointerEventData.InputButton.Right)
 			{
 				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Equip, this);
 			}
-			else if (eventData.button == PointerEventData.InputButton.Middle)
+			if (eventData.button == PointerEventData.InputButton.Middle)
 			{
 				_playerController.InteractWithItemIcon(PlayerController.ItemAction.Consume, this);
 			}
@@ -94,12 +94,13 @@ namespace InventorySystem
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
-			_playerController.UpdateTooltip(_item);
+			object[] eventParams = { (object)_item.ToString() };
+			EventManager.TriggerEvent(EventName.OPEN_TOOLTIP, eventParams);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
 		{
-			_playerController.UpdateTooltip();
+			EventManager.TriggerEvent(EventName.CLOSE_TOOLTIP);
 		}
 	}
 }

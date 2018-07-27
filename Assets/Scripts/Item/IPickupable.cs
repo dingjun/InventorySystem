@@ -10,6 +10,10 @@ namespace InventorySystem
 
 		void OnRemoveFromInventory(InventoryController playerInventory, int rowIndex, int slotIndex);
 
+		void OnPutInAir(PlayerController playerController);
+
+		void OnRemoveFromAir(PlayerController playerController);
+
 		void OnPutOnGround();
 
 		void OnRemoveFromGround();

@@ -46,6 +46,18 @@ namespace InventorySystem
 			playerInventory.RemoveItem(rowIndex, slotIndex);
 		}
 
+		public void OnPutInAir(PlayerController playerController)
+		{
+			Debug.Log("PutInAir " + Name);
+			//playerController.AddItem((Item)MemberwiseClone());
+		}
+
+		public void OnRemoveFromAir(PlayerController playerController)
+		{
+			Debug.Log("RemoveFromAir " + Name);
+			//playerController.RemoveItem();
+		}
+
 		public void OnPutOnGround()
 		{
 			// TODO

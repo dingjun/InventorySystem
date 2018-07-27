@@ -25,7 +25,7 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.UPDATE_INVENTORY, UpdateInventory);
-			UpdateInventory();
+			UpdateInventory(null);
 		}
 
 		private void OnDisable()
@@ -33,7 +33,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.UPDATE_INVENTORY, UpdateInventory);
 		}
 
-		private void UpdateInventory()
+		private void UpdateInventory(object[] eventParams)
 		{
 			// remove rows
 			while (_entries.Count > _playerInventory.Rows.Count)

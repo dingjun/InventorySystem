@@ -5,9 +5,13 @@ using UnityEngine.Events;
 
 namespace InventorySystem
 {
+	public class MyUnityEvent : UnityEvent<object[]>
+	{
+	}
+
 	public class EventManager : MonoBehaviour
 	{
-		private Dictionary<string, UnityEvent> _eventDictionary;
+		private Dictionary<string, MyUnityEvent> _eventDictionary;
 
 		private static EventManager _eventManager;
 		private static bool _isApplicationQuitting = false;
@@ -38,40 +42,40 @@ namespace InventorySystem
 		{
 			if (_eventDictionary == null)
 			{
-				_eventDictionary = new Dictionary<string, UnityEvent>();
+				_eventDictionary = new Dictionary<string, MyUnityEvent>();
 			}
 		}
 
-		public static void StartListening(string eventName, UnityAction listener)
+		public static void StartListening(string eventName, UnityAction<object[]> listener)
 		{
-			UnityEvent thisEvent;
+			MyUnityEvent thisEvent;
 			if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
 			{
 				thisEvent.AddListener(listener);
 			}
 			else
 			{
-				thisEvent = new UnityEvent();
+				thisEvent = new MyUnityEvent();
 				thisEvent.AddListener(listener);
 				Instance._eventDictionary.Add(eventName, thisEvent);
 			}
 		}
 
-		public static void StopListening(string eventName, UnityAction listener)
+		public static void StopListening(string eventName, UnityAction<object[]> listener)
 		{
-			UnityEvent thisEvent;
+			MyUnityEvent thisEvent;
 			if (_isApplicationQuitting == false && Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
 			{
 				thisEvent.RemoveListener(listener);
 			}
 		}
 
-		public static void TriggerEvent(string eventName)
+		public static void TriggerEvent(string eventName, object[] eventParams = null)
 		{
-			UnityEvent thisEvent;
+			MyUnityEvent thisEvent;
 			if (Instance._eventDictionary.TryGetValue(eventName, out thisEvent))
 			{
-				thisEvent.Invoke();
+				thisEvent.Invoke(eventParams);
 			}
 		}
 	}

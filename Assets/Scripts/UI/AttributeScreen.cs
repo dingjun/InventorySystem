@@ -29,7 +29,7 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.UPDATE_ATTRIBUTE, UpdateAttribute);
-			UpdateAttribute();
+			UpdateAttribute(null);
 		}
 
 		private void OnDisable()
@@ -37,7 +37,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.UPDATE_ATTRIBUTE, UpdateAttribute);
 		}
 
-		private void UpdateAttribute()
+		private void UpdateAttribute(object[] eventParams)
 		{
 			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{

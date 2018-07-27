@@ -9,17 +9,13 @@ namespace InventorySystem
 	{
 		public Text TooltipText;
 
-		void Update()
+		public void UpdateTooltip(string text)
 		{
-			transform.position = Input.mousePosition;
-		}
-
-		public void UpdateTooltip(Item item)
-		{
-			gameObject.SetActive(item != null);
-			if (item != null)
+			gameObject.SetActive(text != null);
+			if (text != null)
 			{
-				TooltipText.text = item.ToString();
+				GetComponent<MouseFollower>().Update();
+				TooltipText.text = text;
 			}
 		}
 	}

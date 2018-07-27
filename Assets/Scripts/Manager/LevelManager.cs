@@ -64,7 +64,7 @@ namespace InventorySystem
 			}
 
 			// item
-			SpawnNewItems();
+			SpawnNewItems(null);
 		}
 
 		private void OnEnable()
@@ -77,7 +77,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.SPAWN_NEW_ITEMS, SpawnNewItems);
 		}
 
-		public void SpawnNewItems()
+		public void SpawnNewItems(object[] eventParams)
 		{
 			for (int i = 0; i < NUMBER_SPAWNING_ITEMS; ++i)
 			{

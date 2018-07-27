@@ -32,7 +32,7 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.UPDATE_EQUIPMENT, UpdateEquipment);
-			UpdateEquipment();
+			UpdateEquipment(null);
 		}
 
 		private void OnDisable()
@@ -40,7 +40,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.UPDATE_EQUIPMENT, UpdateEquipment);
 		}
 
-		private void UpdateEquipment()
+		private void UpdateEquipment(object[] eventParams)
 		{
 			for (int i = 0; i < _playerEquipment.EquipmentTable.Count; ++i)
 			{

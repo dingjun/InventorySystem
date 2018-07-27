@@ -7,14 +7,12 @@ namespace InventorySystem
 	public class InputManager : MonoBehaviour
 	{
 		private PlayerController _playerController;
-		private PickupOptionController _pickupOptionController;
 
 		// Use this for initialization
 		void Start()
 		{
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerController = player.GetComponent<PlayerController>();
-			_pickupOptionController = player.GetComponent<PickupOptionController>();
 		}
 		
 		// Update is called once per frame
@@ -22,31 +20,31 @@ namespace InventorySystem
 		{
 			if (Input.GetKeyDown(KeyCode.Alpha1))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option1;
+				SetPickupOption(PickupOptionController.PickupOption.Option1);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha2))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option2;
+				SetPickupOption(PickupOptionController.PickupOption.Option2);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha3))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option3;
+				SetPickupOption(PickupOptionController.PickupOption.Option3);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha4))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option4;
+				SetPickupOption(PickupOptionController.PickupOption.Option4);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha5))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option5;
+				SetPickupOption(PickupOptionController.PickupOption.Option5);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha6))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option6;
+				SetPickupOption(PickupOptionController.PickupOption.Option6);
 			}
 			if (Input.GetKeyDown(KeyCode.Alpha7))
 			{
-				_pickupOptionController.Option = PickupOptionController.PickupOption.Option7;
+				SetPickupOption(PickupOptionController.PickupOption.Option7);
 			}
 
 			if (Input.GetKeyDown(KeyCode.I))
@@ -78,22 +76,28 @@ namespace InventorySystem
 			}
 		}
 
-		public void ToggleInventoryScreen()
+		private void SetPickupOption(PickupOptionController.PickupOption option)
+		{
+			object[] eventParams = { (object)option };
+			EventManager.TriggerEvent(EventName.SET_PICKUP_OPTION, eventParams);
+		}
+
+		private void ToggleInventoryScreen()
 		{
 			EventManager.TriggerEvent(EventName.TOGGLE_INVENTORY_SCREEN);
 		}
 
-		public void ToggleEquipmentScreen()
+		private void ToggleEquipmentScreen()
 		{
 			EventManager.TriggerEvent(EventName.TOGGLE_EQUIPMENT_SCREEN);
 		}
 
-		public void ToggleAttributeScreen()
+		private void ToggleAttributeScreen()
 		{
 			EventManager.TriggerEvent(EventName.TOGGLE_ATTRIBUTE_SCREEN);
 		}
 
-		public void SpawnNewItems()
+		private void SpawnNewItems()
 		{
 			EventManager.TriggerEvent(EventName.SPAWN_NEW_ITEMS);
 		}
