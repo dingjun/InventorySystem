@@ -22,7 +22,7 @@ namespace InventorySystem
 
 		public void SetPosition(int slotIndex)
 		{
-			Slot.SetPosition(new ItemPosition(EQUIPMENT_SLOT_ROW_INDEX, slotIndex));
+			Slot.SetPosition(new SlotPosition(EQUIPMENT_SLOT_ROW_INDEX, slotIndex));
 		}
 
 		public void UpdateSlot(Equipment equipment)

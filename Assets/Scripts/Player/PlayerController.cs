@@ -34,6 +34,7 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
 			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
@@ -42,6 +43,7 @@ namespace InventorySystem
 		private void OnDisable()
 		{
 			EventManager.StopListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
 			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
@@ -104,6 +106,11 @@ namespace InventorySystem
 			}
 		}
 
+		private bool PutAirItemToSlot(SlotPosition slotPosition)
+		{
+			return false;
+		}
+
 		private void ClickItemObject(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is Transform);
@@ -128,22 +135,80 @@ namespace InventorySystem
 			}
 		}
 
+		private void LeftClickItemSlot(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is SlotPosition);
+			SlotPosition slotPosition = (SlotPosition)eventParams[0];
+
+			if (_airItem.IsEmpty)
+			{
+				return;
+			}
+
+			IPickupable pickupable = _airItem.Item as IPickupable;
+			if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
+			{
+				IEquipable equipable = _airItem.Item as IEquipable;
+				if (equipable == null || (Equipment.EquipmentType)slotPosition.SlotIndex != equipable.EquipmentType)
+				{
+					return;
+				}
+				pickupable.OnRemoveFromAir(_airItem);
+				equipable.OnEquip(_equipment, _stats);
+			}
+			else
+			{
+				pickupable.OnRemoveFromAir(_airItem);
+				pickupable.OnPutInInventory(_inventory, slotPosition);
+			}
+		}
+
 		private void LeftClickItemIcon(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
 			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			SlotPosition slotPosition = itemIcon.Position;
 			IPickupable pickupable = itemIcon.Item as IPickupable;
 			IEquipable equipable = itemIcon.Item as IEquipable;
-			if (itemIcon.IsEquipmentIcon)
+
+			if (_airItem.IsEmpty)
 			{
-				equipable.OnUnequip(_equipment, _stats);
+				if (itemIcon.IsEquipmentIcon)
+				{
+					equipable.OnUnequip(_equipment, _stats);
+				}
+				else
+				{
+					pickupable.OnRemoveFromInventory(_inventory, slotPosition);
+				}
+				pickupable.OnPutInAir(_airItem, slotPosition);
 			}
 			else
 			{
-				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+				IPickupable pickupableAir = _airItem.Item as IPickupable;
+				if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
+				{
+					IEquipable equipableAir = _airItem.Item as IEquipable;
+					if (equipableAir == null || (Equipment.EquipmentType)(slotPosition.SlotIndex) != equipableAir.EquipmentType)
+					{
+						return;
+					}
+
+					equipable.OnUnequip(_equipment, _stats);
+					pickupableAir.OnRemoveFromAir(_airItem);
+					equipableAir.OnEquip(_equipment, _stats);
+					pickupable.OnPutInAir(_airItem, slotPosition);
+				}
+				else
+				{
+					pickupable.OnRemoveFromInventory(_inventory, slotPosition);
+					pickupableAir.OnRemoveFromAir(_airItem);
+					pickupableAir.OnPutInInventory(_inventory, slotPosition);
+					pickupable.OnPutInAir(_airItem, slotPosition);
+				}
 			}
 		}
-
+		
 		private void RightClickItemIcon(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);

@@ -14,11 +14,10 @@ namespace InventorySystem
 
 		private void Awake()
 		{
-			_entries = new List<AttributeEntry>();
-
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerStats = player.GetComponent<AttributeController>();
 
+			_entries = new List<AttributeEntry>();
 			for (int i = 0; i < _playerStats.AttributeTable.Count; ++i)
 			{
 				GameObject entry = Instantiate(AttributeEntryPrefab, AttributeEntryParent);

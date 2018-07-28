@@ -6,13 +6,13 @@ namespace InventorySystem
 {
 	public interface IPickupable
 	{
-		void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null);
+		void OnPutInInventory(InventoryController playerInventory, SlotPosition? slotPosition = null);
 
-		void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition);
+		void OnRemoveFromInventory(InventoryController playerInventory, SlotPosition slotPosition);
 
-		void OnPutInAir(PlayerController playerController);
+		void OnPutInAir(AirItemController _playerAirItem, SlotPosition slotPosition);
 
-		void OnRemoveFromAir(PlayerController playerController);
+		void OnRemoveFromAir(AirItemController _playerAirItem);
 
 		void OnPutOnGround();
 

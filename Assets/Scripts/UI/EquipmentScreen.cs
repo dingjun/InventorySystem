@@ -14,11 +14,10 @@ namespace InventorySystem
 
 		private void Awake()
 		{
-			_slots = new List<EquipmentSlot>();
-
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerEquipment = player.GetComponent<EquipmentController>();
 
+			_slots = new List<EquipmentSlot>();
 			for (int i = 0; i < _playerEquipment.EquipmentTable.Count; ++i)
 			{
 				GameObject slot = Instantiate(EquipmentSlotPrefab, EquipmentSlotParent);

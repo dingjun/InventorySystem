@@ -4,18 +4,6 @@ using UnityEngine;
 
 namespace InventorySystem
 {
-	public struct ItemPosition
-	{
-		public readonly int RowIndex;
-		public readonly int SlotIndex;
-
-		public ItemPosition(int rowIndex, int slotIndex)
-		{
-			RowIndex = rowIndex;
-			SlotIndex = slotIndex;
-		}
-	}
-
 	[System.Serializable]
 	public abstract class Item : MonoBehaviour
 	{

@@ -7,6 +7,24 @@ namespace InventorySystem
 	public class AirItemController : MonoBehaviour
 	{
 		private Item _item;
+		private SlotPosition _originalPosition;
+
+		public Item Item
+		{
+			get
+			{
+				return _item;
+			}
+		}
+		
+		public SlotPosition OriginalPosition
+		{
+			get
+			{
+				Debug.Assert(IsEmpty == false);
+				return _originalPosition;
+			}
+		}
 
 		public bool IsEmpty
 		{
@@ -21,10 +39,12 @@ namespace InventorySystem
 			return "==== Air Item ====\n" + ((_item == null) ? "____" : _item.Name);
 		}
 
-		public void AddItem(Item item)
+		public void AddItem(Item item, SlotPosition slotPosition)
 		{
 			Debug.Assert(item is IPickupable);
+
 			_item = item;
+			_originalPosition = slotPosition;
 
 			EventManager.TriggerEvent(EventName.UPDATE_AIR_ITEM);
 

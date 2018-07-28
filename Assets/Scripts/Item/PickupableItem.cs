@@ -7,28 +7,28 @@ namespace InventorySystem
 	[System.Serializable]
 	public class PickupableItem : Item, IPickupable
 	{
-		public void OnPutInInventory(InventoryController playerInventory, ItemPosition? itemPosition = null)
+		public void OnPutInInventory(InventoryController playerInventory, SlotPosition? slotPosition = null)
 		{
 			Debug.Log("PutInInventory " + Name);
-			playerInventory.AddItem((Item)MemberwiseClone(), itemPosition);
+			playerInventory.AddItem((Item)MemberwiseClone(), slotPosition);
 		}
 
-		public void OnRemoveFromInventory(InventoryController playerInventory, ItemPosition itemPosition)
+		public void OnRemoveFromInventory(InventoryController playerInventory, SlotPosition slotPosition)
 		{
 			Debug.Log("RemoveFromInventory " + Name);
-			playerInventory.RemoveItem(itemPosition);
+			playerInventory.RemoveItem(slotPosition);
 		}
 
-		public void OnPutInAir(PlayerController playerController)
+		public void OnPutInAir(AirItemController _playerAirItem, SlotPosition slotPosition)
 		{
 			Debug.Log("PutInAir " + Name);
-			//playerController.AddItem((Item)MemberwiseClone());
+			_playerAirItem.AddItem((Item)MemberwiseClone(), slotPosition);
 		}
 
-		public void OnRemoveFromAir(PlayerController playerController)
+		public void OnRemoveFromAir(AirItemController _playerAirItem)
 		{
 			Debug.Log("RemoveFromAir " + Name);
-			//playerController.RemoveItem();
+			_playerAirItem.RemoveItem();
 		}
 
 		public void OnPutOnGround()

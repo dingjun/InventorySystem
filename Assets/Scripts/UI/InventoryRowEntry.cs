@@ -12,7 +12,7 @@ namespace InventorySystem
 		{
 			for (int i = 0; i < Slots.Length; ++i)
 			{
-				Slots[i].SetPosition(new ItemPosition(rowIndex, i));
+				Slots[i].SetPosition(new SlotPosition(rowIndex, i));
 			}
 		}
 

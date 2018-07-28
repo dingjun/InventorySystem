@@ -18,6 +18,7 @@ namespace InventorySystem
 		public const string UPDATE_AIR_ITEM				= "UPDATE_AIR_ITEM";
 
 		public const string CLICK_ITEM_OBJECT			= "CLICK_ITEM_OBJECT";
+		public const string LEFT_CLICK_ITEM_SLOT		= "LEFT_CLICK_ITEM_SLOT";
 		public const string LEFT_CLICK_ITEM_ICON		= "LEFT_CLICK_ITEM_ICON";
 		public const string RIGHT_CLICK_ITEM_ICON		= "RIGHT_CLICK_ITEM_ICON";
 		public const string MIDDLE_CLICK_ITEM_ICON		= "MIDDLE_CLICK_ITEM_ICON";

@@ -14,10 +14,9 @@ namespace InventorySystem
 
 		private void Awake()
 		{
-			_entries = new List<InventoryRowEntry>();
-
 			GameObject player = GameObject.FindGameObjectWithTag(Constant.TAG_PLAYER);
 			_playerInventory = player.GetComponent<InventoryController>();
+			_entries = new List<InventoryRowEntry>();
 		}
 
 		private void OnEnable()

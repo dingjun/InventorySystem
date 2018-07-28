@@ -8,9 +8,9 @@ namespace InventorySystem
 {
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
-		private ItemPosition _itemPosition;
-		private Item _item;		// TODO: remove
+		private Item _item;     // TODO: remove
 
+		public ItemSlot Slot;
 		public Image ItemImage;
 		public Text ItemCount;
 
@@ -27,11 +27,11 @@ namespace InventorySystem
 			}
 		}
 
-		public ItemPosition Position
+		public SlotPosition Position
 		{
 			get
 			{
-				return _itemPosition;
+				return Slot.Position;
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace InventorySystem
 		{
 			get
 			{
-				return _itemPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX;
+				return Position.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX;
 			}
 		}
 
@@ -57,11 +57,6 @@ namespace InventorySystem
 				// TODO: set up count
 				gameObject.SetActive(true);
 			}
-		}
-
-		public void SetPosition(ItemPosition itemPosition)
-		{
-			_itemPosition = itemPosition;
 		}
 
 		public void OnPointerClick(PointerEventData eventData)
