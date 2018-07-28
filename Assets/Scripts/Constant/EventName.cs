@@ -22,6 +22,7 @@ namespace InventorySystem
 		public const string LEFT_CLICK_ITEM_ICON		= "LEFT_CLICK_ITEM_ICON";
 		public const string RIGHT_CLICK_ITEM_ICON		= "RIGHT_CLICK_ITEM_ICON";
 		public const string MIDDLE_CLICK_ITEM_ICON		= "MIDDLE_CLICK_ITEM_ICON";
+		public const string RETURN_AIR_ITEM				= "RETURN_AIR_ITEM";
 
 		public const string OPEN_TOOLTIP				= "OPEN_TOOLTIP";
 		public const string CLOSE_TOOLTIP				= "CLOSE_TOOLTIP";

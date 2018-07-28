@@ -39,12 +39,14 @@ namespace InventorySystem
 		{
 			InventoryScreen.SetActive(!InventoryScreen.activeSelf);
 			InventoryButton.SetActive(!InventoryButton.activeSelf);
+			CheckInventoryEquipmentScreens();
 		}
 
 		private void ToggleEquipmentScreen(object[] eventParams)
 		{
 			EquipmentScreen.SetActive(!EquipmentScreen.activeSelf);
 			EquipmentButton.SetActive(!EquipmentButton.activeSelf);
+			CheckInventoryEquipmentScreens();
 		}
 
 		private void ToggleAttributeScreen(object[] eventParams)
@@ -62,6 +64,14 @@ namespace InventorySystem
 		private void CloseTooltip(object[] eventParams)
 		{
 			ItemTooltip.UpdateTooltip(null);
+		}
+
+		private void CheckInventoryEquipmentScreens()
+		{
+			if (InventoryScreen.activeSelf == false && EquipmentScreen.activeSelf == false)
+			{
+				EventManager.TriggerEvent(EventName.RETURN_AIR_ITEM);
+			}
 		}
 	}
 }

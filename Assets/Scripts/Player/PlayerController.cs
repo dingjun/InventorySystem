@@ -38,6 +38,7 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
 			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
 
 		private void OnDisable()
@@ -47,6 +48,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
 			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
 
 		private void FixedUpdate()
@@ -79,30 +81,6 @@ namespace InventorySystem
 			if (item != null)
 			{
 				InteractWithItemObject(item);
-			}
-		}
-
-		private void InteractWithItemObject(Item item)
-		{
-			IUsable usable = item as IUsable;
-			IPickupable pickupable = item as IPickupable;
-			IEquipable equipable = item as IEquipable;
-
-			if (usable != null)
-			{
-				usable.OnUse(_stats);
-			}
-			else if (pickupable != null)
-			{
-				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
-				{
-					equipable.OnEquip(_equipment, _stats);
-				}
-				else
-				{
-					pickupable.OnPutInInventory(_inventory);
-				}
-				pickupable.OnRemoveFromGround();
 			}
 		}
 
@@ -218,6 +196,13 @@ namespace InventorySystem
 		private void RightClickItemIcon(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+
+			if (_airItem.IsEmpty == false)
+			{
+				Debug.Log("Air Item is not null");
+				return;
+			}
+
 			ItemIcon itemIcon = (ItemIcon)eventParams[0];
 			IPickupable pickupable = itemIcon.Item as IPickupable;
 			IEquipable equipable = itemIcon.Item as IEquipable;
@@ -249,6 +234,69 @@ namespace InventorySystem
 		private void MiddleClickItemIcon(object[] eventParams)
 		{
 			// TODO
+		}
+
+		private void ReturnAirItem(object[] eventParams)
+		{
+			if (_airItem.IsEmpty)
+			{
+				return;
+			}
+
+			SlotPosition originalPosition = _airItem.OriginalPosition;
+			IPickupable pickupableAir = _airItem.Item as IPickupable;
+			IEquipable equipableAir = _airItem.Item as IEquipable;
+
+			pickupableAir.OnRemoveFromAir(_airItem);
+
+			if (originalPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
+			{
+				Equipment.EquipmentType equipmentType = (Equipment.EquipmentType)(originalPosition.SlotIndex);
+
+				if (_equipment.EquipmentTable[equipmentType].IsEmpty)
+				{
+					equipableAir.OnEquip(_equipment, _stats);
+				}
+				else
+				{
+					pickupableAir.OnPutInInventory(_inventory);
+				}
+			}
+			else
+			{
+				if (_inventory.Rows[originalPosition.RowIndex].Items[originalPosition.SlotIndex] == null)
+				{
+					pickupableAir.OnPutInInventory(_inventory, originalPosition);
+				}
+				else
+				{
+					pickupableAir.OnPutInInventory(_inventory);
+				}
+			}
+		}
+
+		private void InteractWithItemObject(Item item)
+		{
+			IUsable usable = item as IUsable;
+			IPickupable pickupable = item as IPickupable;
+			IEquipable equipable = item as IEquipable;
+
+			if (usable != null)
+			{
+				usable.OnUse(_stats);
+			}
+			else if (pickupable != null)
+			{
+				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
+				{
+					equipable.OnEquip(_equipment, _stats);
+				}
+				else
+				{
+					pickupable.OnPutInInventory(_inventory);
+				}
+				pickupable.OnRemoveFromGround();
+			}
 		}
 	}
 }
