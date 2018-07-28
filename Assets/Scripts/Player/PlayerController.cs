@@ -106,11 +106,6 @@ namespace InventorySystem
 			}
 		}
 
-		private bool PutAirItemToSlot(SlotPosition slotPosition)
-		{
-			return false;
-		}
-
 		private void ClickItemObject(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is Transform);
@@ -149,8 +144,14 @@ namespace InventorySystem
 			if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
 			{
 				IEquipable equipable = _airItem.Item as IEquipable;
-				if (equipable == null || (Equipment.EquipmentType)slotPosition.SlotIndex != equipable.EquipmentType)
+				if (equipable == null)
 				{
+					Debug.Log("Not equipable");
+					return;
+				}
+				if ((Equipment.EquipmentType)(slotPosition.SlotIndex) != equipable.EquipmentType)
+				{
+					Debug.Log("Not the same equipment type");
 					return;
 				}
 				pickupable.OnRemoveFromAir(_airItem);
@@ -189,11 +190,16 @@ namespace InventorySystem
 				if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
 				{
 					IEquipable equipableAir = _airItem.Item as IEquipable;
-					if (equipableAir == null || (Equipment.EquipmentType)(slotPosition.SlotIndex) != equipableAir.EquipmentType)
+					if (equipableAir == null)
 					{
+						Debug.Log("Not equipable");
 						return;
 					}
-
+					if ((Equipment.EquipmentType)(slotPosition.SlotIndex) != equipableAir.EquipmentType)
+					{
+						Debug.Log("Not the same equipment type");
+						return;
+					}
 					equipable.OnUnequip(_equipment, _stats);
 					pickupableAir.OnRemoveFromAir(_airItem);
 					equipableAir.OnEquip(_equipment, _stats);
@@ -218,6 +224,7 @@ namespace InventorySystem
 
 			if (equipable == null)
 			{
+				Debug.Log("Not equipable");
 				return;
 			}
 

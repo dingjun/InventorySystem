@@ -1752,6 +1752,11 @@ Prefab:
       propertyPath: m_Name
       value: ItemSlotAir
       objectReference: {fileID: 0}
+    - target: {fileID: 114044933810997706, guid: 346858206e345ed4187954d92e22af87,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 346858206e345ed4187954d92e22af87, type: 2}
   m_IsPrefabParent: 0
