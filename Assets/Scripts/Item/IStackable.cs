@@ -14,6 +14,7 @@ namespace InventorySystem
 		int Count
 		{
 			get;
+			set;
 		}
 
 		bool IsNoStackLimit
@@ -21,8 +22,8 @@ namespace InventorySystem
 			get;
 		}
 
-		void OnStack();
+		void OnStack(InventoryController _playerInventory);
 
-		void OnSplit();
+		void OnSplit(InventoryController _playerInventory);
 	}
 }

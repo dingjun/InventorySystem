@@ -16,24 +16,64 @@ namespace InventorySystem
 		 */
 		private string[] _itemInfos =
 		{
-			"EquipableItem,	Weapon_1,		0,		2,	0,	1,	10,	0",
-			"EquipableItem,	Shield_1,		1,		3,	0,	1,	11,	0",
-			"EquipableItem,	Armor_1,		2,		4,	0,	1,	12,	0",
-			"EquipableItem,	Ring_1,			3,		5,	0,	1,	13,	0",
-			"EquipableItem,	Ring_2,			3,		2,	0,	0,	14,	0",
-			"EquipableItem,	Shield_2,		1,		3,	0,	0,	15,	0",
-			"EquipableItem,	Shield_3,		1,		4,	0,	0,	16,	0",
-			"EquipableItem,	Armor_2,		2,		5,	0,	0,	17,	0",
-			"EquipableItem,	Armor_3,		2,		2,	0,	0,	18,	0,	3,	0,	0,	-18,	0",
-			"EquipableItem,	Weapon_2,		0,		0,	0,	1,	19,	0",
-			"EquipableItem,	Shield_4,		1,		1,	0,	1,	20,	0",
-			"EquipableItem,	Weapon_3,		0,		0,	1,	1,	21,	0",
-			"UsableItem,	UsableItem_1,	n/a,	0,	0,	0,	22,	0",
-			"EquipableItem,	Armor_4,		2,		1,	1,	1,	23,	0",
-			"EquipableItem,	Armor_5,		2,		0,	0,	0,	24,	0",
-			"EquipableItem,	Weapon_4,		0,		1,	0,	0,	25,	0",
-			"EquipableItem,	Weapon_5,		0,		0,	1,	0,	26,	0",
-			"EquipableItem,	Armor_6,		2,		1,	1,	0,	27,	0",
+			"EquipableItem,		Weapon_1,		0,		2,	0,	1,	10,	0",
+			"EquipableItem,		Shield_1,		1,		3,	0,	1,	11,	0",
+			"EquipableItem,		Armor_1,		2,		4,	0,	1,	12,	0",
+			"EquipableItem,		Ring_1,			3,		5,	0,	1,	13,	0",
+			"EquipableItem,		Ring_2,			3,		2,	0,	0,	14,	0",
+			"EquipableItem,		Shield_2,		1,		3,	0,	0,	15,	0",
+			"EquipableItem,		Shield_3,		1,		4,	0,	0,	16,	0",
+			"EquipableItem,		Armor_2,		2,		5,	0,	0,	17,	0",
+			"EquipableItem,		Armor_3,		2,		2,	0,	0,	18,	0,	3,	0,	0,	-18,	0",
+			"EquipableItem,		Weapon_2,		0,		0,	0,	1,	19,	0",
+			"EquipableItem,		Shield_4,		1,		1,	0,	1,	20,	0",
+			"EquipableItem,		Weapon_3,		0,		0,	1,	1,	21,	0",
+			"UsableItem,		UsableItem_1,	n/a,	0,	0,	0,	22,	0",
+			"EquipableItem,		Armor_4,		2,		1,	1,	1,	23,	0",
+			"EquipableItem,		Armor_5,		2,		0,	0,	0,	24,	0",
+			"EquipableItem,		Weapon_4,		0,		1,	0,	0,	25,	0",
+			"EquipableItem,		Weapon_5,		0,		0,	1,	0,	26,	0",
+			"EquipableItem,		Armor_6,		2,		1,	1,	0,	27,	0",
+			"StackableItem,		Rune_1,			2,		0,	1,	0,	1,	0",
+			"StackableItem,		Rune_2,			3,		1,	1,	0,	2,	0",
+			"StackableItem,		Rune_3,			4,		2,	0,	0,	3,	0",
+			"StackableItem,		Rune_4,			5,		3,	0,	0,	4,	0",
+			"StackableItem,		Rune_5,			2,		4,	0,	0,	5,	0",
+			"StackableItem,		Rune_6,			3,		5,	0,	0,	6,	0",
+			"StackableItem,		Rune_7,			4,		0,	1,	0,	7,	0",
+			"StackableItem,		Rune_8,			5,		1,	1,	0,	8,	0",
+			"StackableItem,		Rune_9,			2,		2,	0,	0,	9,	0",
+			"StackableItem,		Rune_10,		3,		3,	0,	0,	10,	0",
+			"StackableItem,		Rune_11,		4,		4,	0,	1,	11,	0",
+			"StackableItem,		Rune_12,		5,		5,	0,	1,	12,	0",
+			"StackableItem,		Rune_13,		2,		0,	1,	1,	13,	0",
+			"StackableItem,		Rune_14,		3,		1,	1,	1,	14,	0",
+			"StackableItem,		Rune_15,		4,		2,	0,	1,	15,	0",
+			"StackableItem,		Rune_16,		5,		3,	0,	1,	16,	0",
+			"StackableItem,		Rune_17,		2,		4,	0,	1,	17,	0",
+			"StackableItem,		Rune_18,		3,		5,	0,	1,	18,	0",
+			"StackableItem,		Rune_19,		4,		0,	1,	1,	19,	0",
+			"StackableItem,		Rune_20,		5,		1,	1,	1,	20,	0",
+			"PickupableItem,	Book_1,			n/a,	0,	1,	0,	1,	0",
+			"PickupableItem,	Book_2,			n/a,	1,	1,	0,	2,	0",
+			"PickupableItem,	Book_3,			n/a,	2,	0,	0,	3,	0",
+			"PickupableItem,	Book_4,			n/a,	3,	0,	0,	4,	0",
+			"PickupableItem,	Book_5,			n/a,	4,	0,	0,	5,	0",
+			"PickupableItem,	Book_6,			n/a,	5,	0,	0,	6,	0",
+			"PickupableItem,	Book_7,			n/a,	0,	1,	0,	7,	0",
+			"PickupableItem,	Book_8,			n/a,	1,	1,	0,	8,	0",
+			"PickupableItem,	Book_9,			n/a,	2,	0,	0,	9,	0",
+			"PickupableItem,	Book_10,		n/a,	3,	0,	0,	10,	0",
+			"PickupableItem,	Book_11,		n/a,	4,	0,	1,	11,	0",
+			"PickupableItem,	Book_12,		n/a,	5,	0,	1,	12,	0",
+			"PickupableItem,	Book_13,		n/a,	0,	1,	1,	13,	0",
+			"PickupableItem,	Book_14,		n/a,	1,	1,	1,	14,	0",
+			"PickupableItem,	Book_15,		n/a,	2,	0,	1,	15,	0",
+			"PickupableItem,	Book_16,		n/a,	3,	0,	1,	16,	0",
+			"PickupableItem,	Book_17,		n/a,	4,	0,	1,	17,	0",
+			"PickupableItem,	Book_18,		n/a,	5,	0,	1,	18,	0",
+			"PickupableItem,	Book_19,		n/a,	0,	1,	1,	19,	0",
+			"PickupableItem,	Book_20,		n/a,	1,	1,	1,	20,	0",
 		};
 
 		private Item[] _itemDatabase;
@@ -129,137 +169,5 @@ namespace InventorySystem
 		{
 			return GetItem(GetItemTypeIndex(itemName));
 		}
-
-		/*public Item AttachItemComponent(GameObject gameObject, string itemName)
-		{
-			return AttachItemComponent(gameObject, GetItemTypeIndex(itemName));
-		}
-
-		public Item AttachItemComponent(GameObject gameObject, int itemTypeIndex)
-		{
-			/*Item item = EquipableItem.Attach(gameObject, (EquipableItem)_itemDatabase[itemTypeIndex]);
-			return item;
-			//gameObject.
-		}*/
-
-
-
-		/*public Item AttachItemComponent(GameObject gameObject, int itemTypeIndex)
-		{
-			
-			Dictionary<Attribute.AttributeType, AttributeBuff> buttTable = new Dictionary<Attribute.AttributeType, AttributeBuff>();
-			switch (itemTypeIndex)
-			{
-			case 0:
-				{
-					buttTable.Add(Attribute.AttributeType.Strength, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 10));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 5));
-					return EquipableItem.Attach(gameObject, "Weapon_1", Icons[0], buttTable, Equipment.EquipmentType.Weapon);
-				}
-			case 1:
-				{
-					buttTable.Add(Attribute.AttributeType.Dexterity, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, 10));
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, 5));
-					return EquipableItem.Attach(gameObject, "Shield_1", Icons[1], buttTable, Equipment.EquipmentType.Shield);
-				}
-			case 2:
-				{
-					buttTable.Add(Attribute.AttributeType.Health, new AttributeBuff(AttributeBuff.BuffTarget.Maximum, AttributeBuff.BuffType.Amount, 100));
-					return EquipableItem.Attach(gameObject, "Armor_1", Icons[2], buttTable, Equipment.EquipmentType.Armor);
-				}
-			case 3:
-				{
-					buttTable.Add(Attribute.AttributeType.Mana, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 100));
-					return EquipableItem.Attach(gameObject, "Ring_1", Icons[3], buttTable, Equipment.EquipmentType.Ring);
-				}
-			case 4:
-				{
-					buttTable.Add(Attribute.AttributeType.Mana, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 300));
-					return EquipableItem.Attach(gameObject, "Ring_2", Icons[4], buttTable, Equipment.EquipmentType.Ring);
-				}
-			case 5:
-				{
-					buttTable.Add(Attribute.AttributeType.Strength, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Dexterity, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, -10));
-					return EquipableItem.Attach(gameObject, "Shield_2", Icons[5], buttTable, Equipment.EquipmentType.Shield);
-				}
-			case 6:
-				{
-					buttTable.Add(Attribute.AttributeType.Strength, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Shield_3", Icons[6], buttTable, Equipment.EquipmentType.Shield);
-				}
-			case 7:
-				{
-					buttTable.Add(Attribute.AttributeType.Strength, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 15));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 15));
-					return EquipableItem.Attach(gameObject, "Armor_2", Icons[7], buttTable, Equipment.EquipmentType.Armor);
-				}
-			case 8:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Armor_3", Icons[8], buttTable, Equipment.EquipmentType.Armor);
-				}
-			case 9:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Weapon_2", Icons[9], buttTable, Equipment.EquipmentType.Weapon);
-				}
-			case 10:
-				{
-					buttTable.Add(Attribute.AttributeType.Strength, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Shield_4", Icons[10], buttTable, Equipment.EquipmentType.Shield);
-				}
-			case 11:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Weapon_3", Icons[11], buttTable, Equipment.EquipmentType.Weapon);
-				}
-			case 12:
-				{
-					AttributeBuff buff = new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 10);
-					buttTable.Add(Attribute.AttributeType.Strength, buff);
-					return UsableItem.Attach(gameObject, "UsableItem_1", Icons[12], buttTable);
-				}
-			case 13:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Armor_4", Icons[13], buttTable, Equipment.EquipmentType.Armor);
-				}
-			case 14:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Armor_5", Icons[14], buttTable, Equipment.EquipmentType.Armor);
-				}
-			case 15:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Weapon_4", Icons[15], buttTable, Equipment.EquipmentType.Weapon);
-				}
-			case 16:
-				{
-					buttTable.Add(Attribute.AttributeType.Intelligence, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Amount, 30));
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Weapon_5", Icons[16], buttTable, Equipment.EquipmentType.Weapon);
-				}
-			case 17:
-				{
-					
-					buttTable.Add(Attribute.AttributeType.Agility, new AttributeBuff(AttributeBuff.BuffTarget.Current, AttributeBuff.BuffType.Percentage, -10));
-					return EquipableItem.Attach(gameObject, "Armor_6", Icons[17], buttTable, Equipment.EquipmentType.Armor);
-				}
-			default:
-				{
-					return PickupableItem.Attach(gameObject, "pickupableItem", Icons[17], new Dictionary<Attribute.AttributeType, AttributeBuff>());
-				}
-			}
-		}*/
 	}
 }

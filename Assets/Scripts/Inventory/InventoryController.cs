@@ -118,6 +118,39 @@ namespace InventorySystem
 			Debug.Log(this.ToString());
 		}
 
+		public void StackItem(Item item)
+		{
+			Debug.Assert(item is IStackable);
+			IStackable stackable = item as IStackable;
+
+			for (int i = 0; i < RowCount && stackable.Count > 0; ++i)
+			{
+				for (int j = 0; j < InventoryRow.NUMBER_SLOTS && stackable.Count > 0; ++j)
+				{
+					Item itemInventory = _rows[i].GetItem(j);
+					IStackable stackableInventory = itemInventory as IStackable;
+					if (stackableInventory != null && itemInventory.Name == item.Name)
+					{
+						int availableStackCount = Mathf.Clamp(stackable.Count, 0, stackableInventory.StackLimit - stackableInventory.Count);
+						stackableInventory.Count += availableStackCount;
+						stackable.Count -= availableStackCount;
+					}
+				}
+			}
+			if (stackable.Count > 0)
+			{
+				if (IsFull)
+				{
+					AddRows();
+				}
+				_rows[GetAvailableRowIndex()].AddItem(item);
+			}
+
+			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
+
+			Debug.Log(this.ToString());
+		}
+
 		public void RemoveItem(SlotPosition slotPosition)
 		{
 			_rows[slotPosition.RowIndex].RemoveItem(slotPosition.SlotIndex);

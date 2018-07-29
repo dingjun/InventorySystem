@@ -301,7 +301,6 @@ namespace InventorySystem
 			{
 				if (_inventory.IsItemEmpty(originalPosition))
 				{
-					Debug.Log("test");
 					pickupableAir.OnPutInInventory(_inventory, originalPosition);
 				}
 				else
@@ -317,6 +316,7 @@ namespace InventorySystem
 			IUsable usable = itemObject.Item as IUsable;
 			IPickupable pickupable = itemObject.Item as IPickupable;
 			IEquipable equipable = itemObject.Item as IEquipable;
+			IStackable stackable = itemObject.Item as IStackable;
 
 			if (usable != null)
 			{
@@ -327,6 +327,10 @@ namespace InventorySystem
 				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
 				{
 					equipable.OnEquip(_equipment, _stats);
+				}
+				else if (stackable != null)
+				{
+					stackable.OnStack(_inventory);
 				}
 				else
 				{

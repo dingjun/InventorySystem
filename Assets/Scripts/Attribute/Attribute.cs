@@ -120,7 +120,7 @@ namespace InventorySystem
 				}
 			}
 
-			Mathf.Clamp(_newCurrentValue, 0, _newMaxValue);
+			_newCurrentValue = Mathf.Clamp(_newCurrentValue, 0, _newMaxValue);
 		}
 	}
 }

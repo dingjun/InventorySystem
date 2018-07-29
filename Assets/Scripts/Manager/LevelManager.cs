@@ -93,16 +93,14 @@ namespace InventorySystem
 			Debug.Assert(eventParams.Length == 2 && eventParams[0] is Vector3 && eventParams[1] is Item);
 			Vector3 playerPosition = (Vector3)eventParams[0];
 			Item item = (Item)eventParams[1];
+			IStackable stackable = item as IStackable;
 
-			Vector3 itemPosition = playerPosition + (Vector3)Random.insideUnitCircle.normalized * DISTANCE_DROPPED_ITEM;
-			GameObject itemObject = Instantiate(ItemPrefab, itemPosition, Quaternion.identity, ItemParent);
-			itemObject.GetComponent<ItemObject>().Item = ItemDB.GetItem(item.Name);
-			
-			if (item is IStackable)
+			int itemCount = (stackable == null) ? 1 : stackable.Count;
+			for (int i = 0; i < itemCount; ++i)
 			{
-				IStackable stackable = item as IStackable;
-				IStackable stackableWorld = itemObject.GetComponent<ItemObject>().Item as IStackable;
-				// TODO: set stackableWorld count
+				Vector3 itemPosition = playerPosition + (Vector3)Random.insideUnitCircle.normalized * DISTANCE_DROPPED_ITEM;
+				GameObject itemObject = Instantiate(ItemPrefab, itemPosition, Quaternion.identity, ItemParent);
+				itemObject.GetComponent<ItemObject>().Item = ItemDB.GetItem(item.Name);
 			}
 		}
 	}

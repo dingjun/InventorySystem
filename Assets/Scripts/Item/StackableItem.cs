@@ -26,6 +26,10 @@ namespace InventorySystem
 			{
 				return _count;
 			}
+			set
+			{
+				_count = value;
+			}
 		}
 
 		public bool IsNoStackLimit
@@ -90,12 +94,13 @@ namespace InventorySystem
 			itemObject.DestroySelf();
 		}
 
-		public void OnStack()
+		public void OnStack(InventoryController playerInventory)
 		{
-			// TODO
+			Debug.Log("Stack " + Name);
+			playerInventory.StackItem(Copy());
 		}
 
-		public void OnSplit()
+		public void OnSplit(InventoryController _playerInventory)
 		{
 			// TODO
 		}
