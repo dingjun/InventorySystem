@@ -11,6 +11,16 @@ namespace InventorySystem
 			get;
 		}
 
+		int Count
+		{
+			get;
+		}
+
+		bool IsNoStackLimit
+		{
+			get;
+		}
+
 		void OnStack();
 
 		void OnSplit();

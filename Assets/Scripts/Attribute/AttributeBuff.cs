@@ -7,7 +7,7 @@ namespace InventorySystem
 	[System.Serializable]
 	public class AttributeBuff
 	{
-		public enum BuffTarget { Maximum, Current };
+		public enum BuffTarget { Current, Maximum };
 		public enum BuffType { Amount, Percentage };
 
 		private const float PERMANENT_SECONDS = 0f;
@@ -63,6 +63,24 @@ namespace InventorySystem
 			_type = type;
 			_value = value;
 			_seconds = seconds;
+		}
+
+		public override string ToString()
+		{
+			string text = _value.ToString("+#;-#");
+			if (_type == BuffType.Percentage)
+			{
+				text += "%";
+			}
+			if (_target == BuffTarget.Maximum)
+			{
+				text += "(Max)";
+			}
+			if (IsPermanent == false)
+			{
+				text += " for " + _seconds.ToString("0.00") + "s";
+			}
+			return text;
 		}
 
 		public int CalculateNewAttributeValue(int attributeValue)

@@ -7,7 +7,7 @@ namespace InventorySystem
 	public class PlayerController : MonoBehaviour
 	{
 		private const float SPEED = 3f;
-		private const float PROXIMITY_SQUARE = 9f;
+		private const float PROXIMITY_SQUARE = 16f;
 
 		private Rigidbody2D _rigidBody;
 		private Animator _animator;
@@ -39,6 +39,7 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
 			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
+			EventManager.StartListening(EventName.DROP_AIR_ITEM, DropAirItem);
 		}
 
 		private void OnDisable()
@@ -49,6 +50,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
 			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
+			EventManager.StopListening(EventName.DROP_AIR_ITEM, DropAirItem);
 		}
 
 		private void FixedUpdate()
@@ -77,10 +79,10 @@ namespace InventorySystem
 				return;
 			}
 
-			Item item = other.GetComponent<Item>();
-			if (item != null)
+			ItemObject itemObject = other.GetComponent<ItemObject>();
+			if (itemObject != null)
 			{
-				InteractWithItemObject(item);
+				InteractWithItemObject(itemObject);
 			}
 		}
 
@@ -101,10 +103,10 @@ namespace InventorySystem
 				return;
 			}
 
-			Item item = other.GetComponent<Item>();
-			if (item != null)
+			ItemObject itemObject = other.GetComponent<ItemObject>();
+			if (itemObject != null)
 			{
-				InteractWithItemObject(item);
+				InteractWithItemObject(itemObject);
 			}
 		}
 
@@ -264,8 +266,9 @@ namespace InventorySystem
 			}
 			else
 			{
-				if (_inventory.Rows[originalPosition.RowIndex].Items[originalPosition.SlotIndex] == null)
+				if (_inventory.IsItemEmpty(originalPosition))
 				{
+					Debug.Log("test");
 					pickupableAir.OnPutInInventory(_inventory, originalPosition);
 				}
 				else
@@ -275,11 +278,24 @@ namespace InventorySystem
 			}
 		}
 
-		private void InteractWithItemObject(Item item)
+		private void DropAirItem(object[] eventParams)
 		{
-			IUsable usable = item as IUsable;
-			IPickupable pickupable = item as IPickupable;
-			IEquipable equipable = item as IEquipable;
+			if (_airItem.IsEmpty)
+			{
+				return;
+			}
+
+			IPickupable pickupableAir = _airItem.Item as IPickupable;
+			pickupableAir.OnRemoveFromAir(_airItem);
+			pickupableAir.OnPutOnGround(transform.position);
+		}
+
+		private void InteractWithItemObject(ItemObject itemObject)
+		{
+			Debug.Assert(itemObject.Item != null);
+			IUsable usable = itemObject.Item as IUsable;
+			IPickupable pickupable = itemObject.Item as IPickupable;
+			IEquipable equipable = itemObject.Item as IEquipable;
 
 			if (usable != null)
 			{
@@ -295,7 +311,7 @@ namespace InventorySystem
 				{
 					pickupable.OnPutInInventory(_inventory);
 				}
-				pickupable.OnRemoveFromGround();
+				pickupable.OnRemoveFromGround(itemObject);
 			}
 		}
 	}

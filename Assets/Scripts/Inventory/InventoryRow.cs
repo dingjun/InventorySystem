@@ -10,14 +10,6 @@ namespace InventorySystem
 
 		private Item[] _items = new Item[NUMBER_SLOTS];
 
-		public Item[] Items
-		{
-			get
-			{
-				return _items;
-			}
-		}
-
 		public bool IsEmpty
 		{
 			get
@@ -63,6 +55,18 @@ namespace InventorySystem
 				}
 			}
 			return text;
+		}
+
+		public bool IsItemEmpty(int index)
+		{
+			Debug.Assert(index >= 0 && index < _items.Length);
+			return _items[index] == null;
+		}
+
+		public Item GetItem(int index)
+		{
+			Debug.Assert(index >=0 && index < _items.Length);
+			return _items[index];
 		}
 
 		public void AddItem(Item item, int? index = null)

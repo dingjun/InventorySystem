@@ -12,7 +12,6 @@ namespace InventorySystem
 		public GameObject InventoryButton;
 		public GameObject EquipmentButton;
 		public GameObject AttributeButton;
-		public GameObject AirItemSlot;
 		public Tooltip ItemTooltip;
 
 		private void OnEnable()

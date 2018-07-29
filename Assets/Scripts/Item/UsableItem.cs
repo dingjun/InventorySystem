@@ -7,19 +7,26 @@ namespace InventorySystem
 	[System.Serializable]
 	public class UsableItem : Item, IUsable
 	{
+		public UsableItem(string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)
+			: base(name, icon, buffTable)
+		{
+
+		}
+
+		public override Item Copy()
+		{
+			return new UsableItem(_name, _icon, _buffTable);
+		}
+
+		public override string ToString()
+		{
+			return "Name: " + Name + "\nType: Usable\nBuff: " + BuffTableToString();
+		}
+
 		public void OnUse(AttributeController _playerStats)
 		{
 			Debug.Log("Use " + Name);
 			ApplyBuff(_playerStats);
-		}
-
-		public static UsableItem Attach(GameObject itemObject, string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)
-		{
-			UsableItem item = itemObject.AddComponent<UsableItem>();
-			item._name = name;
-			item._icon = icon;
-			item._buffTable = buffTable;
-			return item;
 		}
 	}
 }

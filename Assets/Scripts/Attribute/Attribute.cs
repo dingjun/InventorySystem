@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace InventorySystem
 	{
 		public enum AttributeType { Health, Mana, Strength, Dexterity, Agility, Intelligence };
 
-		private const int NOT_SPENDABLE_MAX_VALUE = Int32.MaxValue;
+		private const int NOT_SPENDABLE_MAX_VALUE = int.MaxValue;
 
 		private readonly AttributeType _type;
 		private int _currentValue;

@@ -33,14 +33,14 @@ namespace InventorySystem
 		private void UpdateInventory(object[] eventParams)
 		{
 			// remove rows
-			while (_entries.Count > _playerInventory.Rows.Count)
+			while (_entries.Count > _playerInventory.RowCount)
 			{
 				int index = _entries.Count - 1;
 				_entries.RemoveAt(index);
 				Destroy(InventoryRowParent.GetChild(index).gameObject);
 			}
 			
-			for (int i = 0; i < _playerInventory.Rows.Count; ++i)
+			for (int i = 0; i < _playerInventory.RowCount; ++i)
 			{
 				// add rows
 				if (i == _entries.Count)
@@ -51,7 +51,7 @@ namespace InventorySystem
 				}
 
 				// update
-				_entries[i].UpdateRow(_playerInventory.Rows[i]);
+				_entries[i].UpdateRow(_playerInventory.GetRow(i));
 			}
 		}
 	}

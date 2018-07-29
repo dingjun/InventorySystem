@@ -525,7 +525,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 110, y: 70}
+  m_SizeDelta: {x: 130, y: 70}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &442311326
 MonoBehaviour:
@@ -3185,7 +3185,6 @@ MonoBehaviour:
   InventoryButton: {fileID: 1433485169}
   EquipmentButton: {fileID: 1956033838}
   AttributeButton: {fileID: 2072932904}
-  AirItemSlot: {fileID: 0}
   ItemTooltip: {fileID: 442311326}
 --- !u!1 &2013250522
 GameObject:

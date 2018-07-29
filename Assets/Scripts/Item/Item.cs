@@ -5,7 +5,7 @@ using UnityEngine;
 namespace InventorySystem
 {
 	[System.Serializable]
-	public abstract class Item : MonoBehaviour
+	public abstract class Item
 	{
 		protected string _name;
 		protected Sprite _icon;
@@ -34,12 +34,26 @@ namespace InventorySystem
 				return _buffTable;
 			}
 		}
-
-		public override string ToString()
+		
+		public Item(string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)
 		{
-			return "Name: " + Name;
+			_name = name;
+			_icon = icon;
+			_buffTable = buffTable;
+		}
 
-			// TODO
+		public abstract Item Copy();
+
+		public abstract override string ToString();
+
+		protected string BuffTableToString()
+		{
+			string text = "";
+			foreach (var buffPair in _buffTable)
+			{
+				text += "\n  " + buffPair.Key.ToString() + " " + buffPair.Value.ToString();
+			}
+			return text;
 		}
 
 		protected void ApplyBuff(AttributeController _playerStats)

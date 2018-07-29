@@ -21,7 +21,7 @@ namespace InventorySystem
 			Debug.Assert(Slots.Length == InventoryRow.NUMBER_SLOTS);
 			for (int i = 0; i < Slots.Length; ++i)
 			{
-				Slots[i].UpdateSlot(row.Items[i]);
+				Slots[i].UpdateSlot(row.GetItem(i));
 			}
 		}
 	}

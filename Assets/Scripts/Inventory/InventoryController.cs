@@ -10,11 +10,11 @@ namespace InventorySystem
 
 		private List<InventoryRow> _rows;
 
-		public List<InventoryRow> Rows
+		public int RowCount
 		{
 			get
 			{
-				return _rows;
+				return _rows.Count;
 			}
 		}
 
@@ -36,10 +36,7 @@ namespace InventorySystem
 		private void Awake()
 		{
 			_rows = new List<InventoryRow>();
-			for (int i = 0; i < MINIMUM_NUMBER_ROWS; ++i)
-			{
-				AddRow();
-			}
+			AddRows(MINIMUM_NUMBER_ROWS);
 		}
 
 		public override string ToString()
@@ -51,31 +48,33 @@ namespace InventorySystem
 			}
 			return text;
 		}
-
-		private void AddRow()
-		{
-			_rows.Add(new InventoryRow());
-		}
-
+		
 		private int GetAvailableRowIndex()
 		{
-			for (int i = 0; i < _rows.Count; ++i)
+			for (int i = 0; i < RowCount; ++i)
 			{
 				if (_rows[i].IsFull == false)
 				{
 					return i;
 				}
 			}
+			Debug.Log(false);
+			return - 1;
+		}
 
-			AddRow();
-			return _rows.Count - 1;
+		private void AddRows(int num = 1)
+		{
+			for (int i = 0; i < num; ++i)
+			{
+				_rows.Add(new InventoryRow());
+			}
 		}
 
 		private void UpdateCapacity()
 		{
-			while (_rows.Count > MINIMUM_NUMBER_ROWS)
+			while (RowCount > MINIMUM_NUMBER_ROWS)
 			{
-				int lastIndex = _rows.Count - 1;
+				int lastIndex = RowCount - 1;
 				if (_rows[lastIndex].IsEmpty == false)
 				{
 					break;
@@ -84,17 +83,33 @@ namespace InventorySystem
 			}
 		}
 
+		public bool IsItemEmpty(SlotPosition slotPosition)
+		{
+			return slotPosition.RowIndex >= RowCount || _rows[slotPosition.RowIndex].IsItemEmpty(slotPosition.SlotIndex);
+		}
+
+		public InventoryRow GetRow(int rowIndex)
+		{
+			Debug.Assert(rowIndex < RowCount);
+			return _rows[rowIndex];
+		}
+
 		public void AddItem(Item item, SlotPosition? slotPosition = null)
 		{
 			Debug.Assert(item is IPickupable);
 
 			if (slotPosition == null)
 			{
+				if (IsFull)
+				{
+					AddRows();
+				}
 				_rows[GetAvailableRowIndex()].AddItem(item);
 			}
 			else
 			{
 				SlotPosition position = slotPosition.GetValueOrDefault();
+				AddRows(position.RowIndex - RowCount + 1);
 				_rows[position.RowIndex].AddItem(item, position.SlotIndex);
 			}
 

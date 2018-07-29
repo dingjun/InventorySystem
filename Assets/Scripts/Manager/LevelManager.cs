@@ -8,7 +8,7 @@ namespace InventorySystem
 	{
 		private const int NUMBER_GROUND_LINES = 24;
 		private const int NUMBER_ROCKS = 3;
-		private const int NUMBER_SPAWNING_ITEMS = 18;
+		private const int DISTANCE_DROPPED_ITEM = 3;
 
 		public Transform TileParent;
 		public Transform ItemParent;
@@ -70,21 +70,33 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.SPAWN_NEW_ITEMS, SpawnNewItems);
+			EventManager.StartListening(EventName.SPAWN_ITEM_NEAR_PLAYER, SpawnItemNextPlayer);
 		}
 
 		private void OnDisable()
 		{
 			EventManager.StopListening(EventName.SPAWN_NEW_ITEMS, SpawnNewItems);
+			EventManager.StopListening(EventName.SPAWN_ITEM_NEAR_PLAYER, SpawnItemNextPlayer);
 		}
 
 		public void SpawnNewItems(object[] eventParams)
 		{
-			for (int i = 0; i < NUMBER_SPAWNING_ITEMS; ++i)
+			for (int i = 0; i < ItemDB.Count; ++i)
 			{
 				GameObject itemObject = Instantiate(ItemPrefab, RandomCoordinates, Quaternion.identity, ItemParent);
-				Item item = ItemDB.AttachItemComponent(itemObject, i);
-				itemObject.GetComponent<SpriteRenderer>().sprite = item.Icon;
+				itemObject.GetComponent<ItemObject>().Item = ItemDB.GetItem(i);
 			}
+		}
+
+		public void SpawnItemNextPlayer(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 2 && eventParams[0] is Vector3 && eventParams[1] is string);
+			Vector3 playerPosition = (Vector3)eventParams[0];
+			string itemName = (string)eventParams[1];
+
+			Vector3 itemPosition = playerPosition + (Vector3)Random.insideUnitCircle.normalized * DISTANCE_DROPPED_ITEM;
+			GameObject itemObject = Instantiate(ItemPrefab, itemPosition, Quaternion.identity, ItemParent);
+			itemObject.GetComponent<ItemObject>().Item = ItemDB.GetItem(itemName);
 		}
 	}
 }

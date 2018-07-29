@@ -8,7 +8,7 @@ namespace InventorySystem
 {
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
-		private Item _item;     // TODO: remove
+		private Item _item;
 
 		public ItemSlot Slot;
 		public Image ItemImage;
@@ -54,7 +54,21 @@ namespace InventorySystem
 			else
 			{
 				ItemImage.sprite = _item.Icon;
-				// TODO: set up count
+
+				IStackable stackable = _item as IStackable;
+				if (stackable == null)
+				{
+					ItemCount.text = "";
+				}
+				else
+				{
+					ItemCount.text = stackable.Count.ToString();
+					if (stackable.IsNoStackLimit == false)
+					{
+						ItemCount.text += "/" + stackable.StackLimit.ToString();
+					}
+				}
+
 				gameObject.SetActive(true);
 			}
 		}
@@ -74,6 +88,7 @@ namespace InventorySystem
 			{
 				EventManager.TriggerEvent(EventName.MIDDLE_CLICK_ITEM_ICON, eventParams);
 			}
+			EventManager.TriggerEvent(EventName.CLOSE_TOOLTIP);
 		}
 
 		public void OnPointerEnter(PointerEventData eventData)

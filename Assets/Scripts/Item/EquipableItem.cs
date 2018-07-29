@@ -17,10 +17,26 @@ namespace InventorySystem
 			}
 		}
 
+		public override Item Copy()
+		{
+			return new EquipableItem(_name, _icon, _buffTable, _equipmentType);
+		}
+
+		public override string ToString()
+		{
+			return "Name: " + Name + "\nType: Equipable-" + _equipmentType.ToString() + "\nBuff: " + BuffTableToString();
+		}
+
+		public EquipableItem(string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable, Equipment.EquipmentType equipmentType)
+			: base(name, icon, buffTable)
+		{
+			_equipmentType = equipmentType;
+		}
+
 		public void OnPutInInventory(InventoryController playerInventory, SlotPosition? slotPosition = null)
 		{
 			Debug.Log("PutInInventory " + Name);
-			playerInventory.AddItem((Item)MemberwiseClone(), slotPosition);
+			playerInventory.AddItem(Copy(), slotPosition);
 		}
 
 		public void OnRemoveFromInventory(InventoryController playerInventory, SlotPosition slotPosition)
@@ -32,7 +48,7 @@ namespace InventorySystem
 		public void OnPutInAir(AirItemController _playerAirItem, SlotPosition slotPosition)
 		{
 			Debug.Log("PutInAir " + Name);
-			_playerAirItem.AddItem((Item)MemberwiseClone(), slotPosition);
+			_playerAirItem.AddItem(Copy(), slotPosition);
 		}
 
 		public void OnRemoveFromAir(AirItemController _playerAirItem)
@@ -41,20 +57,23 @@ namespace InventorySystem
 			_playerAirItem.RemoveItem();
 		}
 
-		public void OnPutOnGround()
+		public void OnPutOnGround(Vector3 playerPosition)
 		{
-			// TODO
+			Debug.Log("OnPutOnGround " + Name);
+			object[] eventParams = { (object)playerPosition, (object)this };
+			EventManager.TriggerEvent(EventName.SPAWN_ITEM_NEAR_PLAYER, eventParams);
 		}
 
-		public void OnRemoveFromGround()
+		public void OnRemoveFromGround(ItemObject itemObject)
 		{
-			Destroy(gameObject);
+			Debug.Log("RemoveFromGround " + Name);
+			itemObject.DestroySelf();
 		}
 
 		public void OnEquip(EquipmentController playerEquipment, AttributeController playerStats)
 		{
 			Debug.Log("Equip " + Name);
-			playerEquipment.AddItem((Item)MemberwiseClone());
+			playerEquipment.AddItem(Copy());
 			ApplyBuff(playerStats);
 		}
 
@@ -63,16 +82,6 @@ namespace InventorySystem
 			Debug.Log("Unequip " + Name);
 			playerEquipment.RemoveItem(_equipmentType);
 			UnapplyBuff(playerStats);
-		}
-
-		public static EquipableItem Attach(GameObject itemObject, string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable, Equipment.EquipmentType type)
-		{
-			EquipableItem item = itemObject.AddComponent<EquipableItem>();
-			item._name = name;
-			item._icon = icon;
-			item._buffTable = buffTable;
-			item._equipmentType = type;
-			return item;
 		}
 	}
 }

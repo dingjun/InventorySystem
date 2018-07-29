@@ -14,8 +14,8 @@ namespace InventorySystem
 
 		void OnRemoveFromAir(AirItemController _playerAirItem);
 
-		void OnPutOnGround();
+		void OnPutOnGround(Vector3 playerPosition);
 
-		void OnRemoveFromGround();
+		void OnRemoveFromGround(ItemObject itemObject);
 	}
 }
