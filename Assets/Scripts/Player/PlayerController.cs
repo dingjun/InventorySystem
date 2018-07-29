@@ -7,7 +7,7 @@ namespace InventorySystem
 	public class PlayerController : MonoBehaviour
 	{
 		private const float SPEED = 3f;
-		private const float PROXIMITY_SQUARE = 16f;
+		private const float PROXIMITY_SQUARE = 4f;
 
 		private Rigidbody2D _rigidBody;
 		private Animator _animator;

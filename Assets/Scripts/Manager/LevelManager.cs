@@ -8,7 +8,7 @@ namespace InventorySystem
 	{
 		private const int NUMBER_GROUND_LINES = 24;
 		private const int NUMBER_ROCKS = 3;
-		private const int DISTANCE_DROPPED_ITEM = 3;
+		private const int DISTANCE_DROPPED_ITEM = 1;
 
 		public Transform TileParent;
 		public Transform ItemParent;
