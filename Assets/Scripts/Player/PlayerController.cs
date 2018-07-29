@@ -88,7 +88,7 @@ namespace InventorySystem
 
 		private void OnTriggerEnter2D(Collider2D other)
 		{
-			if (_pickupOption.Option != PickupOptionController.PickupOption.Option2)
+			if (_pickupOption.Option == PickupOptionController.PickupOption.Option1)
 			{
 				return;
 			}

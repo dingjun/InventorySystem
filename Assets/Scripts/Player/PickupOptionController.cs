@@ -10,6 +10,8 @@ namespace InventorySystem
 
 		private PickupOption _option;
 
+		public CircleCollider2D OverlayCircleCollider;
+
 		public PickupOption Option
 		{
 			get
@@ -22,15 +24,18 @@ namespace InventorySystem
 				{
 				case PickupOption.Option1:
 				case PickupOption.Option2:
+				case PickupOption.Option5:
 					{
 						_option = value;
-						return;
+						break;
 					}
 				default:
 					{
-						return;
+						break;
 					}
 				}
+
+				OverlayCircleCollider.enabled = (_option == PickupOption.Option4 || _option == PickupOption.Option5);
 			}
 		}
 		
