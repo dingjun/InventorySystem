@@ -6,7 +6,10 @@ namespace InventorySystem
 {
 	public class InputManager : MonoBehaviour
 	{
-		public const KeyCode LEFT_CLICK_DROP_HOTKEY = KeyCode.LeftShift;
+		public const KeyCode LEFT_CLICK_DROP_HOTKEY		= KeyCode.LeftShift;
+		public const KeyCode HOVER_SPLIT_HOTKEY			= KeyCode.P;
+		public const KeyCode HOVER_DROP_HOTKEY			= KeyCode.O;
+		public const KeyCode HOVER_EQUIP_HOTKEY			= KeyCode.Q;
 
 		// Update is called once per frame
 		void Update()
@@ -58,6 +61,19 @@ namespace InventorySystem
 				SpawnNewItems();
 			}
 
+			if (Input.GetKeyDown(HOVER_SPLIT_HOTKEY))
+			{
+				TriggerHoverHotkey(HOVER_SPLIT_HOTKEY);
+			}
+			if (Input.GetKeyDown(HOVER_DROP_HOTKEY))
+			{
+				TriggerHoverHotkey(HOVER_DROP_HOTKEY);
+			}
+			if (Input.GetKeyDown(HOVER_EQUIP_HOTKEY))
+			{
+				TriggerHoverHotkey(HOVER_EQUIP_HOTKEY);
+			}
+
 			if (Input.GetMouseButtonDown(0))
 			{
 				Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -94,6 +110,12 @@ namespace InventorySystem
 		private void SpawnNewItems()
 		{
 			EventManager.TriggerEvent(EventName.SPAWN_NEW_ITEMS);
+		}
+
+		private void TriggerHoverHotkey(KeyCode hotkey)
+		{
+			object[] eventParams = { (object)hotkey };
+			EventManager.TriggerEvent(EventName.TRIGGER_HOVER_HOTKEY, eventParams);
 		}
 	}
 }

@@ -10,9 +10,15 @@ namespace InventorySystem
 		public const string LEFT_CLICK_WORLD						= "LEFT_CLICK_WORLD";
 		public const string LEFT_CLICK_ITEM_SLOT					= "LEFT_CLICK_ITEM_SLOT";
 		public const string LEFT_CLICK_ITEM_ICON					= "LEFT_CLICK_ITEM_ICON";
-		public const string LEFT_CLICK_ITEM_ICON_DROP_HOTKEY		= "LEFT_CLICK_ITEM_ICON_DROP_HOTKEY";
 		public const string RIGHT_CLICK_ITEM_ICON					= "RIGHT_CLICK_ITEM_ICON";
 		public const string MIDDLE_CLICK_ITEM_ICON					= "MIDDLE_CLICK_ITEM_ICON";
+
+		public const string LEFT_CLICK_ITEM_ICON_DROP_HOTKEY		= "LEFT_CLICK_ITEM_ICON_DROP_HOTKEY";
+		public const string TRIGGER_HOVER_HOTKEY					= "TRIGGER_HOVER_HOTKEY";
+		public const string HOVER_ITEM_ICON_SPLIT_HOTKEY			= "HOVER_ITEM_ICON_SPLT_HOTKEY";
+		public const string HOVER_ITEM_ICON_DROP_HOTKEY				= "HOVER_ITEM_ICON_DROP_HOTKEY";
+		public const string HOVER_ITEM_ICON_EQUIP_HOTKEY			= "HOVER_ITEM_ICON_EQUIP_HOTKEY";
+		
 		public const string SPLIT_STACKABLE_ITEM					= "SPLIT_STACKABLE_ITEM";
 		public const string RETURN_AIR_ITEM							= "RETURN_AIR_ITEM";
 

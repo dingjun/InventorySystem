@@ -37,9 +37,14 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
-			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
-			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
-			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, EquipItem);
+			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, ConsumeItem);
+
+			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, DropItem);
+			EventManager.StartListening(EventName.HOVER_ITEM_ICON_SPLIT_HOTKEY, SplitItem);
+			EventManager.StartListening(EventName.HOVER_ITEM_ICON_DROP_HOTKEY, DropItem);
+			EventManager.StartListening(EventName.HOVER_ITEM_ICON_EQUIP_HOTKEY, EquipItem);
+
 			EventManager.StartListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
@@ -50,9 +55,14 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
-			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
-			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
-			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, EquipItem);
+			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, ConsumeItem);
+
+			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, DropItem);
+			EventManager.StopListening(EventName.HOVER_ITEM_ICON_SPLIT_HOTKEY, SplitItem);
+			EventManager.StopListening(EventName.HOVER_ITEM_ICON_DROP_HOTKEY, DropItem);
+			EventManager.StopListening(EventName.HOVER_ITEM_ICON_EQUIP_HOTKEY, EquipItem);
+
 			EventManager.StopListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
@@ -216,26 +226,7 @@ namespace InventorySystem
 			}
 		}
 
-		private void LeftClickItemIconDropHotkey(object[] eventParams)
-		{
-			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
-			ItemIcon itemIcon = (ItemIcon)eventParams[0];
-			SlotPosition slotPosition = itemIcon.Position;
-			IPickupable pickupable = itemIcon.Item as IPickupable;
-			IEquipable equipable = itemIcon.Item as IEquipable;
-
-			if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
-			{
-				equipable.OnUnequip(_equipment, _stats);
-			}
-			else
-			{
-				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
-			}
-			pickupable.OnPutOnGround(transform.position);
-		}
-
-		private void RightClickItemIcon(object[] eventParams)
+		private void EquipItem(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
 
@@ -273,7 +264,26 @@ namespace InventorySystem
 			}
 		}
 
-		private void MiddleClickItemIcon(object[] eventParams)
+		private void DropItem(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			SlotPosition slotPosition = itemIcon.Position;
+			IPickupable pickupable = itemIcon.Item as IPickupable;
+			IEquipable equipable = itemIcon.Item as IEquipable;
+
+			if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
+			{
+				equipable.OnUnequip(_equipment, _stats);
+			}
+			else
+			{
+				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+			}
+			pickupable.OnPutOnGround(transform.position);
+		}
+
+		private void ConsumeItem(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
 			ItemIcon itemIcon = (ItemIcon)eventParams[0];
@@ -284,6 +294,19 @@ namespace InventorySystem
 				return;
 			}
 			consumable.OnConsume(_inventory, _stats, itemIcon.Position);
+		}
+
+		private void SplitItem(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			IStackable stackable = itemIcon.Item as IStackable;
+			if (stackable == null)
+			{
+				Debug.Log("Not splitable");
+				return;
+			}
+			EventManager.TriggerEvent(EventName.OPEN_SPLIT_SCREEN, eventParams);
 		}
 
 		private void SplitStackableItem(object[] eventParams)

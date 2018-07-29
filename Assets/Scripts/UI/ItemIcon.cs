@@ -9,6 +9,7 @@ namespace InventorySystem
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
 		private Item _item;
+		private bool _isMouseHovering;
 
 		public ItemSlot Slot;
 		public Image ItemImage;
@@ -43,6 +44,16 @@ namespace InventorySystem
 			}
 		}
 
+		private void OnEnable()
+		{
+			EventManager.StartListening(EventName.TRIGGER_HOVER_HOTKEY, TriggerHoverHotkey);
+		}
+
+		private void OnDisable()
+		{
+			EventManager.StopListening(EventName.TRIGGER_HOVER_HOTKEY, TriggerHoverHotkey);
+		}
+		
 		private void UpdateIcon()
 		{
 			if (_item == null)
@@ -50,6 +61,7 @@ namespace InventorySystem
 				ItemImage.sprite = null;
 				ItemCount.text = "";
 				gameObject.SetActive(false);
+				_isMouseHovering = false;
 			}
 			else
 			{
@@ -70,6 +82,30 @@ namespace InventorySystem
 				}
 
 				gameObject.SetActive(true);
+			}
+		}
+
+		private void TriggerHoverHotkey(object[] eventParams)
+		{
+			if (_isMouseHovering == false)
+			{
+				return;
+			}
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is KeyCode);
+			KeyCode hotkey = (KeyCode)eventParams[0];
+
+			object[] hotkeyEventParams = { (object)this };
+			if (hotkey == InputManager.HOVER_SPLIT_HOTKEY)
+			{
+				EventManager.TriggerEvent(EventName.HOVER_ITEM_ICON_SPLIT_HOTKEY, hotkeyEventParams);
+			}
+			if (hotkey == InputManager.HOVER_DROP_HOTKEY)
+			{
+				EventManager.TriggerEvent(EventName.HOVER_ITEM_ICON_DROP_HOTKEY, hotkeyEventParams);
+			}
+			if (hotkey == InputManager.HOVER_EQUIP_HOTKEY)
+			{
+				EventManager.TriggerEvent(EventName.HOVER_ITEM_ICON_EQUIP_HOTKEY, hotkeyEventParams);
 			}
 		}
 
@@ -100,12 +136,14 @@ namespace InventorySystem
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
+			_isMouseHovering = true;
 			object[] eventParams = { (object)_item.ToString() };
 			EventManager.TriggerEvent(EventName.OPEN_TOOLTIP, eventParams);
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
 		{
+			_isMouseHovering = false;
 			EventManager.TriggerEvent(EventName.CLOSE_TOOLTIP);
 		}
 	}
