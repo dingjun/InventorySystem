@@ -5,7 +5,9 @@ using UnityEngine;
 namespace InventorySystem
 {
 	public class InputManager : MonoBehaviour
-	{	
+	{
+		public const KeyCode LEFT_CLICK_DROP_HOTKEY = KeyCode.LeftShift;
+
 		// Update is called once per frame
 		void Update()
 		{

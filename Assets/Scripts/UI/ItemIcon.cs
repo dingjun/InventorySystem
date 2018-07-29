@@ -78,7 +78,14 @@ namespace InventorySystem
 			object[] eventParams = { (object)this };
 			if (eventData.button == PointerEventData.InputButton.Left)
 			{
-				EventManager.TriggerEvent(EventName.LEFT_CLICK_ITEM_ICON, eventParams);
+				if (Input.GetKey(InputManager.LEFT_CLICK_DROP_HOTKEY))
+				{
+					EventManager.TriggerEvent(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, eventParams);
+				}
+				else
+				{
+					EventManager.TriggerEvent(EventName.LEFT_CLICK_ITEM_ICON, eventParams);
+				}
 			}
 			if (eventData.button == PointerEventData.InputButton.Right)
 			{

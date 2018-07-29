@@ -34,23 +34,25 @@ namespace InventorySystem
 		private void OnEnable()
 		{
 			EventManager.StartListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StartListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
+			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
 			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
 			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
-			EventManager.StartListening(EventName.DROP_AIR_ITEM, DropAirItem);
 		}
 
 		private void OnDisable()
 		{
 			EventManager.StopListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
+			EventManager.StopListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON, LeftClickItemIcon);
+			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
 			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
 			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
-			EventManager.StopListening(EventName.DROP_AIR_ITEM, DropAirItem);
 		}
 
 		private void FixedUpdate()
@@ -108,6 +110,18 @@ namespace InventorySystem
 			{
 				InteractWithItemObject(itemObject);
 			}
+		}
+
+		private void LeftClickWorld(object[] eventParams)
+		{
+			if (_airItem.IsEmpty)
+			{
+				return;
+			}
+
+			IPickupable pickupableAir = _airItem.Item as IPickupable;
+			pickupableAir.OnRemoveFromAir(_airItem);
+			pickupableAir.OnPutOnGround(transform.position);
 		}
 
 		private void LeftClickItemSlot(object[] eventParams)
@@ -194,7 +208,26 @@ namespace InventorySystem
 				}
 			}
 		}
-		
+
+		private void LeftClickItemIconDropHotkey(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			SlotPosition slotPosition = itemIcon.Position;
+			IPickupable pickupable = itemIcon.Item as IPickupable;
+			IEquipable equipable = itemIcon.Item as IEquipable;
+
+			if (slotPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
+			{
+				equipable.OnUnequip(_equipment, _stats);
+			}
+			else
+			{
+				pickupable.OnRemoveFromInventory(_inventory, itemIcon.Position);
+			}
+			pickupable.OnPutOnGround(transform.position);
+		}
+
 		private void RightClickItemIcon(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
@@ -276,18 +309,6 @@ namespace InventorySystem
 					pickupableAir.OnPutInInventory(_inventory);
 				}
 			}
-		}
-
-		private void DropAirItem(object[] eventParams)
-		{
-			if (_airItem.IsEmpty)
-			{
-				return;
-			}
-
-			IPickupable pickupableAir = _airItem.Item as IPickupable;
-			pickupableAir.OnRemoveFromAir(_airItem);
-			pickupableAir.OnPutOnGround(transform.position);
 		}
 
 		private void InteractWithItemObject(ItemObject itemObject)
