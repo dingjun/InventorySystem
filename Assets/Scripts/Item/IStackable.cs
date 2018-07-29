@@ -22,8 +22,8 @@ namespace InventorySystem
 			get;
 		}
 
-		void OnStack(InventoryController _playerInventory);
+		void OnStack(InventoryController playerInventory, SlotPosition? slotPosition = null);
 
-		void OnSplit(InventoryController _playerInventory);
+		void OnSplit(InventoryController playerInventory, SlotPosition slotPosition, int splitCount);
 	}
 }

@@ -10,9 +10,9 @@ namespace InventorySystem
 
 		void OnRemoveFromInventory(InventoryController playerInventory, SlotPosition slotPosition);
 
-		void OnPutInAir(AirItemController _playerAirItem, SlotPosition slotPosition);
+		void OnPutInAir(AirItemController playerAirItem, SlotPosition slotPosition);
 
-		void OnRemoveFromAir(AirItemController _playerAirItem);
+		void OnRemoveFromAir(AirItemController playerAirItem);
 
 		void OnPutOnGround(Vector3 playerPosition);
 

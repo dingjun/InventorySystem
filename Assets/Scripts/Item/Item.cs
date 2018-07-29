@@ -56,16 +56,16 @@ namespace InventorySystem
 			return text;
 		}
 
-		protected void ApplyBuff(AttributeController _playerStats)
+		protected void ApplyBuff(AttributeController playerStats)
 		{
 			Debug.Log("ApplyBuff " + Name);
-			_playerStats.ApplyBuff(_buffTable);
+			playerStats.ApplyBuff(_buffTable);
 		}
 
-		protected void UnapplyBuff(AttributeController _playerStats)
+		protected void UnapplyBuff(AttributeController playerStats)
 		{
 			Debug.Log("UnapplyBuff " + Name);
-			_playerStats.UnapplyBuff(_buffTable);
+			playerStats.UnapplyBuff(_buffTable);
 		}
 	}
 }

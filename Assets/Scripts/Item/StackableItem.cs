@@ -69,16 +69,16 @@ namespace InventorySystem
 			playerInventory.RemoveItem(slotPosition);
 		}
 
-		public void OnPutInAir(AirItemController _playerAirItem, SlotPosition slotPosition)
+		public void OnPutInAir(AirItemController playerAirItem, SlotPosition slotPosition)
 		{
 			Debug.Log("PutInAir " + Name);
-			_playerAirItem.AddItem(Copy(), slotPosition);
+			playerAirItem.AddItem(Copy(), slotPosition);
 		}
 
-		public void OnRemoveFromAir(AirItemController _playerAirItem)
+		public void OnRemoveFromAir(AirItemController playerAirItem)
 		{
 			Debug.Log("RemoveFromAir " + Name);
-			_playerAirItem.RemoveItem();
+			playerAirItem.RemoveItem();
 		}
 
 		public void OnPutOnGround(Vector3 playerPosition)
@@ -94,15 +94,16 @@ namespace InventorySystem
 			itemObject.DestroySelf();
 		}
 
-		public void OnStack(InventoryController playerInventory)
+		public void OnStack(InventoryController playerInventory, SlotPosition? slotPosition = null)
 		{
 			Debug.Log("Stack " + Name);
-			playerInventory.StackItem(Copy());
+			playerInventory.StackItem(Copy(), slotPosition);
 		}
 
-		public void OnSplit(InventoryController _playerInventory)
+		public void OnSplit(InventoryController playerInventory, SlotPosition slotPosition, int splitCount)
 		{
-			// TODO
+			Debug.Log("Split " + Name);
+			playerInventory.SplitItem(slotPosition, splitCount);
 		}
 
 		public void OnConsume(InventoryController playerInventory, AttributeController playerStats, SlotPosition slotPosition)

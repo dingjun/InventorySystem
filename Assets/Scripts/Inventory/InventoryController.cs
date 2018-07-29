@@ -70,6 +70,19 @@ namespace InventorySystem
 			}
 		}
 
+		private void TryStackItem(Item item, SlotPosition slotPosition)
+		{
+			Item itemInventory = GetItem(slotPosition);
+			IStackable stackableInventory = itemInventory as IStackable;
+			IStackable stackable = item as IStackable;
+			if (stackableInventory != null && itemInventory.Name == item.Name)
+			{
+				int availableStackCount = Mathf.Min(stackable.Count, stackableInventory.StackLimit - stackableInventory.Count);
+				stackableInventory.Count += availableStackCount;
+				stackable.Count -= availableStackCount;
+			}
+		}
+
 		private void UpdateCapacity()
 		{
 			while (RowCount > MINIMUM_NUMBER_ROWS)
@@ -92,6 +105,12 @@ namespace InventorySystem
 		{
 			Debug.Assert(rowIndex < RowCount);
 			return _rows[rowIndex];
+		}
+
+		public Item GetItem(SlotPosition slotPosition)
+		{
+			Debug.Assert(slotPosition.RowIndex < RowCount && slotPosition.SlotIndex < InventoryRow.NUMBER_SLOTS);
+			return _rows[slotPosition.RowIndex].GetItem(slotPosition.SlotIndex);
 		}
 
 		public void AddItem(Item item, SlotPosition? slotPosition = null)
@@ -117,24 +136,31 @@ namespace InventorySystem
 
 			Debug.Log(this.ToString());
 		}
+		
+		public void RemoveItem(SlotPosition slotPosition)
+		{
+			_rows[slotPosition.RowIndex].RemoveItem(slotPosition.SlotIndex);
+			UpdateCapacity();
 
-		public void StackItem(Item item)
+			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
+
+			Debug.Log(this.ToString());
+		}
+
+		public void StackItem(Item item, SlotPosition? slotPosition = null)
 		{
 			Debug.Assert(item is IStackable);
 			IStackable stackable = item as IStackable;
 
+			if (slotPosition != null)
+			{
+				TryStackItem(item, slotPosition.GetValueOrDefault());
+			}
 			for (int i = 0; i < RowCount && stackable.Count > 0; ++i)
 			{
 				for (int j = 0; j < InventoryRow.NUMBER_SLOTS && stackable.Count > 0; ++j)
 				{
-					Item itemInventory = _rows[i].GetItem(j);
-					IStackable stackableInventory = itemInventory as IStackable;
-					if (stackableInventory != null && itemInventory.Name == item.Name)
-					{
-						int availableStackCount = Mathf.Clamp(stackable.Count, 0, stackableInventory.StackLimit - stackableInventory.Count);
-						stackableInventory.Count += availableStackCount;
-						stackable.Count -= availableStackCount;
-					}
+					TryStackItem(item, new SlotPosition(i, j));
 				}
 			}
 			if (stackable.Count > 0)
@@ -151,9 +177,11 @@ namespace InventorySystem
 			Debug.Log(this.ToString());
 		}
 
-		public void RemoveItem(SlotPosition slotPosition)
+		public void SplitItem(SlotPosition slotPosition, int splitCount)
 		{
-			_rows[slotPosition.RowIndex].RemoveItem(slotPosition.SlotIndex);
+			IStackable stackable = GetItem(slotPosition) as IStackable;
+			Debug.Assert(stackable != null);
+			stackable.Count -= splitCount;
 			UpdateCapacity();
 
 			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
@@ -163,7 +191,7 @@ namespace InventorySystem
 
 		public void ConsumeItem(SlotPosition slotPosition)
 		{
-			Item item = _rows[slotPosition.RowIndex].GetItem(slotPosition.SlotIndex);
+			Item item = GetItem(slotPosition);
 			IPickupable pickupable = item as IPickupable;
 			IStackable stackable = item as IStackable;
 			if (stackable != null)

@@ -12,6 +12,7 @@ namespace InventorySystem
 		public GameObject InventoryButton;
 		public GameObject EquipmentButton;
 		public GameObject AttributeButton;
+		public SplitScreen SplitScreen;
 		public Tooltip ItemTooltip;
 
 		private void OnEnable()
@@ -19,7 +20,7 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.TOGGLE_INVENTORY_SCREEN, ToggleInventoryScreen);
 			EventManager.StartListening(EventName.TOGGLE_EQUIPMENT_SCREEN, ToggleEquipmentScreen);
 			EventManager.StartListening(EventName.TOGGLE_ATTRIBUTE_SCREEN, ToggleAttributeScreen);
-
+			EventManager.StartListening(EventName.OPEN_SPLIT_SCREEN, OpenSplitScreen);
 			EventManager.StartListening(EventName.OPEN_TOOLTIP, OpenTooltip);
 			EventManager.StartListening(EventName.CLOSE_TOOLTIP, CloseTooltip);
 		}
@@ -29,7 +30,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.TOGGLE_INVENTORY_SCREEN, ToggleInventoryScreen);
 			EventManager.StopListening(EventName.TOGGLE_EQUIPMENT_SCREEN, ToggleEquipmentScreen);
 			EventManager.StopListening(EventName.TOGGLE_ATTRIBUTE_SCREEN, ToggleAttributeScreen);
-
+			EventManager.StopListening(EventName.OPEN_SPLIT_SCREEN, OpenSplitScreen);
 			EventManager.StopListening(EventName.OPEN_TOOLTIP, OpenTooltip);
 			EventManager.StopListening(EventName.CLOSE_TOOLTIP, CloseTooltip);
 		}
@@ -52,6 +53,12 @@ namespace InventorySystem
 		{
 			AttributeScreen.SetActive(!AttributeScreen.activeSelf);
 			AttributeButton.SetActive(!AttributeButton.activeSelf);
+		}
+
+		private void OpenSplitScreen(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			SplitScreen.Open((ItemIcon)eventParams[0]);
 		}
 
 		private void OpenTooltip(object[] eventParams)

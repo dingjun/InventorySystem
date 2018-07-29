@@ -40,6 +40,7 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
 			EventManager.StartListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StartListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StartListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
 
@@ -52,6 +53,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_ICON_DROP_HOTKEY, LeftClickItemIconDropHotkey);
 			EventManager.StopListening(EventName.RIGHT_CLICK_ITEM_ICON, RightClickItemIcon);
 			EventManager.StopListening(EventName.MIDDLE_CLICK_ITEM_ICON, MiddleClickItemIcon);
+			EventManager.StopListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
 
@@ -143,7 +145,7 @@ namespace InventorySystem
 					Debug.Log("Not equipable");
 					return;
 				}
-				if ((Equipment.EquipmentType)(slotPosition.SlotIndex) != equipable.EquipmentType)
+				if ((Equipment.EquipmentType)slotPosition.SlotIndex != equipable.EquipmentType)
 				{
 					Debug.Log("Not the same equipment type");
 					return;
@@ -172,6 +174,11 @@ namespace InventorySystem
 				{
 					equipable.OnUnequip(_equipment, _stats);
 				}
+				else if (itemIcon.Item is IStackable)
+				{
+					EventManager.TriggerEvent(EventName.OPEN_SPLIT_SCREEN, eventParams);
+					return;
+				}
 				else
 				{
 					pickupable.OnRemoveFromInventory(_inventory, slotPosition);
@@ -189,7 +196,7 @@ namespace InventorySystem
 						Debug.Log("Not equipable");
 						return;
 					}
-					if ((Equipment.EquipmentType)(slotPosition.SlotIndex) != equipableAir.EquipmentType)
+					if ((Equipment.EquipmentType)slotPosition.SlotIndex != equipableAir.EquipmentType)
 					{
 						Debug.Log("Not the same equipment type");
 						return;
@@ -279,6 +286,30 @@ namespace InventorySystem
 			consumable.OnConsume(_inventory, _stats, itemIcon.Position);
 		}
 
+		private void SplitStackableItem(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 2 && eventParams[0] is ItemIcon && eventParams[1] is int);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			int splitCount = (int)eventParams[1];
+			Item item = itemIcon.Item;
+			SlotPosition slotPosition = itemIcon.Position;
+			IStackable stackable = (IStackable)item;
+			
+			if (splitCount == stackable.Count)
+			{
+				IPickupable pickupable = (IPickupable)item;
+				pickupable.OnRemoveFromInventory(_inventory, slotPosition);
+				pickupable.OnPutInAir(_airItem, slotPosition);
+			}
+			else
+			{
+				Item splitItem = item.Copy();
+				((IStackable)splitItem).Count = splitCount;
+				((IPickupable)splitItem).OnPutInAir(_airItem, slotPosition);
+				stackable.OnSplit(_inventory, slotPosition, splitCount);
+			}
+		}
+
 		private void ReturnAirItem(object[] eventParams)
 		{
 			if (_airItem.IsEmpty)
@@ -287,14 +318,16 @@ namespace InventorySystem
 			}
 
 			SlotPosition originalPosition = _airItem.OriginalPosition;
-			IPickupable pickupableAir = _airItem.Item as IPickupable;
-			IEquipable equipableAir = _airItem.Item as IEquipable;
+			Item itemAir = _airItem.Item;
+			IPickupable pickupableAir = itemAir as IPickupable;
+			IEquipable equipableAir = itemAir as IEquipable;
+			IStackable stackableAir = itemAir as IStackable;
 
 			pickupableAir.OnRemoveFromAir(_airItem);
 
 			if (originalPosition.RowIndex == EquipmentSlot.EQUIPMENT_SLOT_ROW_INDEX)
 			{
-				Equipment.EquipmentType equipmentType = (Equipment.EquipmentType)(originalPosition.SlotIndex);
+				Equipment.EquipmentType equipmentType = (Equipment.EquipmentType)originalPosition.SlotIndex;
 
 				if (_equipment.EquipmentTable[equipmentType].IsEmpty)
 				{
@@ -307,7 +340,11 @@ namespace InventorySystem
 			}
 			else
 			{
-				if (_inventory.IsItemEmpty(originalPosition))
+				if (stackableAir != null)
+				{
+					stackableAir.OnStack(_inventory, originalPosition);
+				}
+				else if (_inventory.IsItemEmpty(originalPosition))
 				{
 					pickupableAir.OnPutInInventory(_inventory, originalPosition);
 				}

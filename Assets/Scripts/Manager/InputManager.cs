@@ -64,7 +64,7 @@ namespace InventorySystem
 				Collider2D hitCollider = Physics2D.OverlapPoint(mouseWorldPosition, LayerMask.GetMask(Constant.LAYER_ITEM));
 				if (hitCollider)
 				{
-					object[] eventParams = { (object)(hitCollider.transform) };
+					object[] eventParams = { (object)hitCollider.transform };
 					EventManager.TriggerEvent(EventName.CLICK_ITEM_OBJECT, eventParams);
 				}
 			}
