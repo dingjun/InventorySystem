@@ -5,7 +5,7 @@ using UnityEngine;
 namespace InventorySystem
 {
 	[System.Serializable]
-	public class PickupableItem : Item, IPickupable
+	public class PickupableItem : Item, IPickupable, IConsumable
 	{
 		public PickupableItem(string name, Sprite icon, Dictionary<Attribute.AttributeType, AttributeBuff> buffTable)
 			: base(name, icon, buffTable)
@@ -58,6 +58,13 @@ namespace InventorySystem
 		{
 			Debug.Log("RemoveFromGround " + Name);
 			itemObject.DestroySelf();
+		}
+
+		public void OnConsume(InventoryController playerInventory, AttributeController playerStats, SlotPosition slotPosition)
+		{
+			Debug.Log("Consume " + Name);
+			playerInventory.ConsumeItem(slotPosition);
+			ApplyBuff(playerStats);
 		}
 	}
 }

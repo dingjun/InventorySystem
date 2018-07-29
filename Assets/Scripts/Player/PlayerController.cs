@@ -268,7 +268,15 @@ namespace InventorySystem
 
 		private void MiddleClickItemIcon(object[] eventParams)
 		{
-			// TODO
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is ItemIcon);
+			ItemIcon itemIcon = (ItemIcon)eventParams[0];
+			IConsumable consumable = itemIcon.Item as IConsumable;
+			if (consumable == null)
+			{
+				Debug.Log("Not consumable");
+				return;
+			}
+			consumable.OnConsume(_inventory, _stats, itemIcon.Position);
 		}
 
 		private void ReturnAirItem(object[] eventParams)

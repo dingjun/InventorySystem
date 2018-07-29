@@ -23,10 +23,10 @@ namespace InventorySystem
 			return "Name: " + Name + "\nType: Usable\nBuff: " + BuffTableToString();
 		}
 
-		public void OnUse(AttributeController _playerStats)
+		public void OnUse(AttributeController playerStats)
 		{
 			Debug.Log("Use " + Name);
-			ApplyBuff(_playerStats);
+			ApplyBuff(playerStats);
 		}
 	}
 }

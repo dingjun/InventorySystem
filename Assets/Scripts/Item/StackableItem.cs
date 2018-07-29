@@ -5,7 +5,7 @@ using UnityEngine;
 namespace InventorySystem
 {
 	[System.Serializable]
-	public class StackableItem : Item, IPickupable, IStackable
+	public class StackableItem : Item, IPickupable, IStackable, IConsumable
 	{
 		private const int NO_STACK_LIMIT = int.MaxValue;
 
@@ -103,6 +103,13 @@ namespace InventorySystem
 		public void OnSplit(InventoryController _playerInventory)
 		{
 			// TODO
+		}
+
+		public void OnConsume(InventoryController playerInventory, AttributeController playerStats, SlotPosition slotPosition)
+		{
+			Debug.Log("Consume " + Name);
+			playerInventory.ConsumeItem(slotPosition);
+			ApplyBuff(playerStats);
 		}
 	}
 }

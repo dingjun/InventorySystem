@@ -160,5 +160,25 @@ namespace InventorySystem
 
 			Debug.Log(this.ToString());
 		}
+
+		public void ConsumeItem(SlotPosition slotPosition)
+		{
+			Item item = _rows[slotPosition.RowIndex].GetItem(slotPosition.SlotIndex);
+			IPickupable pickupable = item as IPickupable;
+			IStackable stackable = item as IStackable;
+			if (stackable != null)
+			{
+				stackable.Count -= 1;
+			}
+			if (stackable == null || stackable.Count == 0)
+			{
+				pickupable.OnRemoveFromInventory(this, slotPosition);
+			}
+			UpdateCapacity();
+
+			EventManager.TriggerEvent(EventName.UPDATE_INVENTORY);
+
+			Debug.Log(this.ToString());
+		}
 	}
 }
