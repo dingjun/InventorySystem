@@ -6,6 +6,6 @@ namespace InventorySystem
 {
 	public interface IUsable
 	{
-		void OnUse(AttributeController playerStats);
+		void OnUse(AttributeController playerStats, ItemObject itemObject);
 	}
 }

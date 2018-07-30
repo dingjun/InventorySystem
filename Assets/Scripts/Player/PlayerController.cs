@@ -8,6 +8,9 @@ namespace InventorySystem
 	{
 		private const float SPEED = 3f;
 		private const float PROXIMITY_SQUARE = 4f;
+		private const float PHYSICS_CIRCLE_RADIUS = 1f;
+
+		private Vector2 _playerFootPositionOffset = new Vector2(0f, -0.25f);
 
 		private Rigidbody2D _rigidBody;
 		private Animator _animator;
@@ -33,6 +36,8 @@ namespace InventorySystem
 
 		private void OnEnable()
 		{
+			EventManager.StartListening(EventName.CHECK_PHYSICS_CIRCLE, CheckPhysicsCircle);
+
 			EventManager.StartListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
 			EventManager.StartListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StartListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
@@ -51,6 +56,8 @@ namespace InventorySystem
 
 		private void OnDisable()
 		{
+			EventManager.StopListening(EventName.CHECK_PHYSICS_CIRCLE, CheckPhysicsCircle);
+
 			EventManager.StopListening(EventName.CLICK_ITEM_OBJECT, ClickItemObject);
 			EventManager.StopListening(EventName.LEFT_CLICK_WORLD, LeftClickWorld);
 			EventManager.StopListening(EventName.LEFT_CLICK_ITEM_SLOT, LeftClickItemSlot);
@@ -84,15 +91,26 @@ namespace InventorySystem
 				float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
 				_animator.SetFloat("Angle", angle);
 			}
+
+			// pick up items
+			if (_pickupOption.Option == PickupOptionController.PickupOption.Option5
+				|| _pickupOption.Option == PickupOptionController.PickupOption.Option7)
+			{
+				CheckPhysicsCircle();
+			}
 		}
 
-		private void OnTriggerEnter2D(Collider2D other)
+		private void OnTriggerStay2D(Collider2D other)
 		{
-			if (_pickupOption.Option == PickupOptionController.PickupOption.Option1)
+			if (_pickupOption.Option == PickupOptionController.PickupOption.Option2
+				|| _pickupOption.Option == PickupOptionController.PickupOption.Option3 && Input.GetKey(InputManager.PICK_UP_ITEM_KEY))
 			{
-				return;
+				CheckItemObjectCollider(other);
 			}
+		}
 
+		private void CheckItemObjectCollider(Collider2D other)
+		{
 			ItemObject itemObject = other.GetComponent<ItemObject>();
 			if (itemObject != null)
 			{
@@ -100,6 +118,64 @@ namespace InventorySystem
 			}
 		}
 
+		private void InteractWithItemObject(ItemObject itemObject)
+		{
+			Debug.Assert(itemObject.Item != null);
+			IUsable usable = itemObject.Item as IUsable;
+			IPickupable pickupable = itemObject.Item as IPickupable;
+			IEquipable equipable = itemObject.Item as IEquipable;
+			IStackable stackable = itemObject.Item as IStackable;
+
+			if (usable != null)
+			{
+				usable.OnUse(_stats, itemObject);
+			}
+			else if (pickupable != null)
+			{
+				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
+				{
+					equipable.OnEquip(_equipment, _stats);
+				}
+				else if (stackable != null)
+				{
+					stackable.OnStack(_inventory);
+				}
+				else
+				{
+					pickupable.OnPutInInventory(_inventory);
+				}
+				pickupable.OnRemoveFromGround(itemObject);
+			}
+		}
+
+		private void CheckPhysicsCircle(object[] eventParams = null)
+		{
+			if (_pickupOption.Option == PickupOptionController.PickupOption.Option1
+				|| _pickupOption.Option == PickupOptionController.PickupOption.Option2
+				|| _pickupOption.Option == PickupOptionController.PickupOption.Option3)
+			{
+				return;
+			}
+
+			Vector2 point = (Vector2)transform.position + _playerFootPositionOffset;
+			if (_pickupOption.Option == PickupOptionController.PickupOption.Option6
+				|| _pickupOption.Option == PickupOptionController.PickupOption.Option7)
+			{
+				Vector2 direction = _rigidBody.velocity.normalized;
+				if (direction == Vector2.zero)
+				{
+					return;
+				}
+				point += direction;
+			}
+
+			Collider2D[] colliders = Physics2D.OverlapCircleAll(point, PHYSICS_CIRCLE_RADIUS, LayerMask.GetMask(Constant.LAYER_ITEM));
+			foreach (var collider in colliders)
+			{
+				CheckItemObjectCollider(collider);
+			}
+		}
+		
 		private void ClickItemObject(object[] eventParams)
 		{
 			Debug.Assert(eventParams.Length == 1 && eventParams[0] is Transform);
@@ -375,36 +451,6 @@ namespace InventorySystem
 				{
 					pickupableAir.OnPutInInventory(_inventory);
 				}
-			}
-		}
-
-		private void InteractWithItemObject(ItemObject itemObject)
-		{
-			Debug.Assert(itemObject.Item != null);
-			IUsable usable = itemObject.Item as IUsable;
-			IPickupable pickupable = itemObject.Item as IPickupable;
-			IEquipable equipable = itemObject.Item as IEquipable;
-			IStackable stackable = itemObject.Item as IStackable;
-
-			if (usable != null)
-			{
-				usable.OnUse(_stats);
-			}
-			else if (pickupable != null)
-			{
-				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
-				{
-					equipable.OnEquip(_equipment, _stats);
-				}
-				else if (stackable != null)
-				{
-					stackable.OnStack(_inventory);
-				}
-				else
-				{
-					pickupable.OnPutInInventory(_inventory);
-				}
-				pickupable.OnRemoveFromGround(itemObject);
 			}
 		}
 	}

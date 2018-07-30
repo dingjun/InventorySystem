@@ -37,6 +37,7 @@ namespace InventorySystem
 		public const string SPAWN_NEW_ITEMS							= "SPAWN_NEW_ITEMS";
 		public const string SPAWN_ITEM_NEAR_PLAYER					= "SPAWN_ITEM_NEAR_PLAYER";
 
+		public const string CHECK_PHYSICS_CIRCLE					= "CHECK_PHYSICS_CIRCLE";
 		public const string SET_PICKUP_OPTION						= "SET_PICKUP_OPTION";
 	}
 }

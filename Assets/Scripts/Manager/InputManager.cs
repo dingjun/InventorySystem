@@ -6,6 +6,7 @@ namespace InventorySystem
 {
 	public class InputManager : MonoBehaviour
 	{
+		public const KeyCode PICK_UP_ITEM_KEY			= KeyCode.Return;
 		public const KeyCode LEFT_CLICK_DROP_HOTKEY		= KeyCode.LeftShift;
 		public const KeyCode HOVER_SPLIT_HOTKEY			= KeyCode.P;
 		public const KeyCode HOVER_DROP_HOTKEY			= KeyCode.O;
@@ -14,6 +15,11 @@ namespace InventorySystem
 		// Update is called once per frame
 		void Update()
 		{
+			if (Input.GetKey(PICK_UP_ITEM_KEY))
+			{
+				PickupItemObjectKey();
+			}
+
 			if (Input.GetKeyDown(KeyCode.Alpha1))
 			{
 				SetPickupOption(PickupOptionController.PickupOption.Option1);
@@ -84,6 +90,11 @@ namespace InventorySystem
 					EventManager.TriggerEvent(EventName.CLICK_ITEM_OBJECT, eventParams);
 				}
 			}
+		}
+
+		private void PickupItemObjectKey()
+		{
+			EventManager.TriggerEvent(EventName.CHECK_PHYSICS_CIRCLE);
 		}
 
 		private void SetPickupOption(PickupOptionController.PickupOption option)
