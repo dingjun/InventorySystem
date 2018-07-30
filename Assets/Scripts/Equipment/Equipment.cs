@@ -46,6 +46,14 @@ namespace InventorySystem
 			_item = null;
 		}
 
+		public void DecreaseDurability(float durabilityDiff)
+		{
+			if (IsEmpty == false)
+			{
+				((IEquipable)_item).DecreaseDurability(durabilityDiff);
+			}
+		}
+
 		public void AddItem(Item item)
 		{
 			Debug.Assert(item is IEquipable);

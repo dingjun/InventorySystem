@@ -26,6 +26,16 @@ namespace InventorySystem
 			}
 		}
 
+		private void OnEnable()
+		{
+			EventManager.StartListening(EventName.PLAYER_WALK, DecreaseDurability);
+		}
+
+		private void OnDisable()
+		{
+			EventManager.StopListening(EventName.PLAYER_WALK, DecreaseDurability);
+		}
+
 		public override string ToString()
 		{
 			string text = "==== EQUIPMENT ====\n";
@@ -34,6 +44,16 @@ namespace InventorySystem
 				text += equipment.ToString() + "\n";
 			}
 			return text;
+		}
+
+		private void DecreaseDurability(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is float);
+			float durabilityDiff = (float)eventParams[0];
+			foreach (var equipment in _equipmentTable.Values)
+			{
+				equipment.DecreaseDurability(durabilityDiff);
+			}
 		}
 
 		public void AddItem(Item item)

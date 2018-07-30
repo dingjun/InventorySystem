@@ -19,6 +19,7 @@ namespace InventorySystem
 		private EquipmentController _equipment;
 		private AttributeController _stats;
 		private AirItemController _airItem;
+		private Vector3 _lastPosition;
 
 		// Use this for initialization
 		void Start()
@@ -32,6 +33,8 @@ namespace InventorySystem
 			_equipment = GetComponent<EquipmentController>();
 			_stats = GetComponent<AttributeController>();
 			_airItem = GetComponent<AirItemController>();
+
+			_lastPosition = transform.position;
 		}
 
 		private void OnEnable()
@@ -50,6 +53,7 @@ namespace InventorySystem
 			EventManager.StartListening(EventName.HOVER_ITEM_ICON_DROP_HOTKEY, DropItem);
 			EventManager.StartListening(EventName.HOVER_ITEM_ICON_EQUIP_HOTKEY, EquipItem);
 
+			EventManager.StartListening(EventName.UNEQUIP_ITEM_NO_DURABILITY, UnequipItemNoDurability);
 			EventManager.StartListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StartListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
@@ -70,6 +74,7 @@ namespace InventorySystem
 			EventManager.StopListening(EventName.HOVER_ITEM_ICON_DROP_HOTKEY, DropItem);
 			EventManager.StopListening(EventName.HOVER_ITEM_ICON_EQUIP_HOTKEY, EquipItem);
 
+			EventManager.StopListening(EventName.UNEQUIP_ITEM_NO_DURABILITY, UnequipItemNoDurability);
 			EventManager.StopListening(EventName.SPLIT_STACKABLE_ITEM, SplitStackableItem);
 			EventManager.StopListening(EventName.RETURN_AIR_ITEM, ReturnAirItem);
 		}
@@ -83,6 +88,11 @@ namespace InventorySystem
 				input = input.normalized;
 			}
 			_rigidBody.velocity = input * SPEED;
+
+			// calculate distance
+			object[] eventParams = { (object) (transform.position - _lastPosition).magnitude };
+			EventManager.TriggerEvent(EventName.PLAYER_WALK, eventParams);
+			_lastPosition = transform.position;
 
 			// animation
 			_animator.speed = input.magnitude;
@@ -132,7 +142,7 @@ namespace InventorySystem
 			}
 			else if (pickupable != null)
 			{
-				if (equipable != null && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
+				if (equipable != null && equipable.IsDurable && _equipment.EquipmentTable[equipable.EquipmentType].IsEmpty)
 				{
 					equipable.OnEquip(_equipment, _stats);
 				}
@@ -236,6 +246,10 @@ namespace InventorySystem
 					Debug.Log("Not the same equipment type");
 					return;
 				}
+				if (equipable.IsDurable == false)
+				{
+					Debug.Log("Not durable");
+				}
 				pickupable.OnRemoveFromAir(_airItem);
 				equipable.OnEquip(_equipment, _stats);
 			}
@@ -287,6 +301,10 @@ namespace InventorySystem
 						Debug.Log("Not the same equipment type");
 						return;
 					}
+					if (equipable.IsDurable == false)
+					{
+						Debug.Log("Not durable");
+					}
 					equipable.OnUnequip(_equipment, _stats);
 					pickupableAir.OnRemoveFromAir(_airItem);
 					equipableAir.OnEquip(_equipment, _stats);
@@ -321,6 +339,10 @@ namespace InventorySystem
 				Debug.Log("Not equipable");
 				return;
 			}
+			if (equipable.IsDurable == false)
+			{
+				Debug.Log("Not durable");
+			}
 
 			if (itemIcon.IsEquipmentIcon)
 			{
@@ -338,6 +360,15 @@ namespace InventorySystem
 				}
 				equipable.OnEquip(_equipment, _stats);
 			}
+		}
+
+		private void UnequipItemNoDurability(object[] eventParams)
+		{
+			Debug.Assert(eventParams.Length == 1 && eventParams[0] is Item);
+			IPickupable pickupable = eventParams[0] as IPickupable;
+			IEquipable equipable = eventParams[0] as IEquipable;
+			equipable.OnUnequip(_equipment, _stats);
+			pickupable.OnPutInInventory(_inventory);
 		}
 
 		private void DropItem(object[] eventParams)

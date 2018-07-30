@@ -11,6 +11,25 @@ namespace InventorySystem
 			get;
 		}
 
+		float CurDurability
+		{
+			get;
+			set;
+		}
+
+		float MaxDurability
+		{
+			get;
+			set;
+		}
+
+		bool IsDurable
+		{
+			get;
+		}
+
+		void DecreaseDurability(float durabilityDiff);
+
 		void OnEquip(EquipmentController playerEquipment, AttributeController playerStats);
 
 		void OnUnequip(EquipmentController playerEquipment, AttributeController playerStats);

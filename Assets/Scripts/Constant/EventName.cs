@@ -19,6 +19,7 @@ namespace InventorySystem
 		public const string HOVER_ITEM_ICON_DROP_HOTKEY				= "HOVER_ITEM_ICON_DROP_HOTKEY";
 		public const string HOVER_ITEM_ICON_EQUIP_HOTKEY			= "HOVER_ITEM_ICON_EQUIP_HOTKEY";
 		
+		public const string UNEQUIP_ITEM_NO_DURABILITY				= "UNEQUIP_ITEM_NO_DURABILITY";
 		public const string SPLIT_STACKABLE_ITEM					= "SPLIT_STACKABLE_ITEM";
 		public const string RETURN_AIR_ITEM							= "RETURN_AIR_ITEM";
 
@@ -39,5 +40,7 @@ namespace InventorySystem
 
 		public const string CHECK_PHYSICS_CIRCLE					= "CHECK_PHYSICS_CIRCLE";
 		public const string SET_PICKUP_OPTION						= "SET_PICKUP_OPTION";
+
+		public const string PLAYER_WALK								= "PLAYER_WALK";
 	}
 }
