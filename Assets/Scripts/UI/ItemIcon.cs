@@ -8,6 +8,9 @@ namespace InventorySystem
 {
 	public class ItemIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 	{
+		private Color _noStackColor = Color.red;
+		private Color _fullStackColor = Color.yellow;
+
 		private Item _item;
 		private bool _isMouseHovering;
 
@@ -78,6 +81,11 @@ namespace InventorySystem
 					if (stackable.IsNoStackLimit == false)
 					{
 						ItemCount.text += "/" + stackable.StackLimit.ToString();
+						ItemCount.color = Color.Lerp(_noStackColor, _fullStackColor, stackable.Count / (float)stackable.StackLimit);
+					}
+					else
+					{
+						ItemCount.color = _fullStackColor;
 					}
 				}
 
