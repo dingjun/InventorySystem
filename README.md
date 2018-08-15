@@ -1,4 +1,4 @@
-# InventorySystem
+# Inventory System
 
 2D player can move on the level and pick up items from the ground to the inventory. Various item types/functionalities are supported, such as pickupable, equipable, stackable, and consumable. Player attributes are updated accordingly when item is equipped or consumed. Inventory grid screen is dynamically adjusted based on if a row is needed or not.
 
